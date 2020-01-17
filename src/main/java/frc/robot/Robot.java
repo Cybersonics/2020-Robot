@@ -7,9 +7,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.Joystick;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -21,6 +25,9 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  public NetworkTableEntry yaw;
+  public NetworkTableEntry isDriverMode;
+  public Joystick joystick;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -30,7 +37,12 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    joystick = new Joystick(1);
     m_robotContainer = new RobotContainer();
+    NetworkTableInstance table = NetworkTableInstance.getDefault();
+    NetworkTable myCam = table.getTable("chameleon-vision").getSubTable("Microsoft LifeCam HD-3000");
+    yaw=myCam.getEntry("yaw");
+    isDriverMode=myCam.getEntry("driver_mode");
   }
 
   /**
@@ -96,6 +108,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    System.out.println(yaw.getDouble(0.0));//trys to print yaw, if it doesnt exist it will print 0
+    isDriverMode.setBoolean(joystick.getRawButtonPressed(0));// sets driver mode to true if A is pressed
   }
 
   @Override
