@@ -7,8 +7,10 @@
 
 package frc.robot;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
+import java.util.Set;
+
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,6 +31,11 @@ public class Robot extends TimedRobot {
   public NetworkTableEntry isDriverMode;
   public Joystick joystick;
 
+  private final String LifeCamHD = "LifeCamHD";
+  private final String defaultCameraTableName = "/chameleon-vision/" + LifeCamHD;
+  private final NetworkTable chameleonVisionTable = NetworkTableInstance.getDefault().getTable(defaultCameraTableName);
+  
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -39,10 +46,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     joystick = new Joystick(1);
     m_robotContainer = new RobotContainer();
-    NetworkTableInstance table = NetworkTableInstance.getDefault();
-    NetworkTable myCam = table.getTable("chameleon-vision").getSubTable("Microsoft LifeCam HD-3000");
-    yaw=myCam.getEntry("yaw");
-    isDriverMode=myCam.getEntry("driver_mode");
+   
   }
 
   /**
@@ -108,8 +112,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    System.out.println(yaw.getDouble(0.0));//trys to print yaw, if it doesnt exist it will print 0
-    isDriverMode.setBoolean(joystick.getRawButtonPressed(0));// sets driver mode to true if A is pressed
+    yaw=chameleonVisionTable.getEntry("yaw");
+    isDriverMode=chameleonVisionTable.getEntry("driver_mode");
+    isDriverMode.setBoolean(joystick.getRawButtonPressed(3));// sets driver mode to true if A is pressed
+    System.out.println("Yaw:" + yaw.getDouble(0.0));//trys to print yaw, if it doesnt exist it will print 0
   }
 
   @Override
