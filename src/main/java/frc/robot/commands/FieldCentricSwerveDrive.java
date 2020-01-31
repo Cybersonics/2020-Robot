@@ -9,11 +9,8 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Drive;
 
 /**
  * An example command that uses an example subsystem.
@@ -27,6 +24,7 @@ public class FieldCentricSwerveDrive extends CommandBase {
 	private double originCorr = 0;
   	private final double leftPow = 1.0;
 	private final double rightPow = 1.0;
+	private final Drive _drive = new Drive();
 
 	public FieldCentricSwerveDrive() {
 	}
@@ -35,9 +33,6 @@ public class FieldCentricSwerveDrive extends CommandBase {
 
 	@Override
 	public void execute() {
-		if (RobotContainer.getLeftJoyButton(7)) {
-			originHeading = Constants.navX.getFusedHeading();
-		}
 
 		final double originOffset = 360 - originHeading;
 		originCorr = Constants.navX.getFusedHeading() + originOffset;
@@ -81,7 +76,7 @@ public class FieldCentricSwerveDrive extends CommandBase {
 			forward = temp;
 		}
 
-		Drive.swerveDrive(strafe, forward, omega);
+		this._drive.swerveDrive(strafe, forward, omega);
 	}
 
 
