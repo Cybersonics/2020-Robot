@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import frc.robot.Constants;
+
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.*;
 
@@ -46,6 +47,12 @@ public class Drive extends SubsystemBase {
 	private static final double STEER_P = 0.4, STEER_I = 0.0, STEER_D = 0.0;
 	private static final int STATUS_FRAME_PERIOD = 5;
 
+	public static final double OMEGA_SCALE = 1.0 / 30.0;
+	private double originHeading = 0.0;
+	private double originCorr = 0;
+  	private final double leftPow = 1.0;
+	private final double rightPow = 1.0;
+
 	public Drive() {
 		scheduler = CommandScheduler.getInstance();
 		scheduler.registerSubsystem(this);
@@ -74,7 +81,7 @@ public class Drive extends SubsystemBase {
 		steerLeftFront.configFactoryDefault();
 		steerLeftFront.configSelectedFeedbackSensor(FeedbackDevice.Analog , 0, 0);
 		steerLeftFront.setInverted(false);
-		steerLeftFront.setSensorPhase(true);
+		steerLeftFront.setSensorPhase(false);
 		steerLeftFront.config_kP(0, STEER_P, 0);
 		steerLeftFront.config_kI(0, STEER_I, 0);
 		steerLeftFront.config_kD(0, STEER_D, 0);
@@ -88,7 +95,7 @@ public class Drive extends SubsystemBase {
 		steerLeftRear.configFactoryDefault();
 		steerLeftRear.configSelectedFeedbackSensor(FeedbackDevice.Analog, 0, 0);
 		steerLeftRear.setInverted(false);
-		steerLeftRear.setSensorPhase(true);
+		steerLeftRear.setSensorPhase(false);
 		steerLeftRear.config_kP(0, STEER_P, 0);
 		steerLeftRear.config_kI(0, STEER_I, 0);
 		steerLeftRear.config_kD(0, STEER_D, 0);
@@ -116,7 +123,7 @@ public class Drive extends SubsystemBase {
 		steerRightRear.configFactoryDefault();
 		steerRightRear.configSelectedFeedbackSensor(FeedbackDevice.Analog, 0, 0);
 		steerRightRear.setInverted(false);
-		steerRightRear.setSensorPhase(true);
+		steerRightRear.setSensorPhase(false);
 		steerRightRear.config_kP(0, STEER_P, 0);
 		steerRightRear.config_kI(0, STEER_I, 0);
 		steerRightRear.config_kD(0, STEER_D, 0);
@@ -127,7 +134,53 @@ public class Drive extends SubsystemBase {
 		// STATUS_FRAME_PERIOD, 0);
 	}
 
-	public void swerveDrive(double strafe, double forward, double omega) {
+	public void drive(double leftY, double leftX, double rightX, boolean fieldCentric) {
+		// final double originOffset = 360 - originHeading;
+		// originCorr = Constants.navX.getFusedHeading() + originOffset;
+
+		double strafe = Math.pow(Math.abs(leftX), leftPow)
+				* Math.signum(leftX);
+		double forward = Math.pow(Math.abs(leftY), leftPow)
+				* -Math.signum(leftY);
+		double omega = Math.pow(Math.abs(rightX), rightPow)
+				* Math.signum(rightX) * OMEGA_SCALE;
+
+		// Add a small deadzone on the joysticks
+		if (Math.abs(strafe) < Math.pow(DEADZONE, leftPow))
+			strafe = 0.0;
+		if (Math.abs(forward) < Math.pow(DEADZONE, leftPow))
+			forward = 0.0;
+		if (Math.abs(omega) < Math.pow(DEADZONE, rightPow) * OMEGA_SCALE)
+			omega = 0.0;
+
+		// If all of the joysticks are in the deadzone, don't update the motors
+		// This makes side-to-side strafing much smoother
+		if (strafe == 0.0 && forward == 0.0 && omega == 0.0) {
+			this.setDriveLeftFront(0.0);
+			this.setDriveLeftRear(0.0);
+			this.setDriveRightFront(0.0);
+			this.setDriveRightRear(0.0);
+			return;
+		}
+
+		if (fieldCentric) {
+			// When the Left Joystick trigger is not pressed, The robot is in Field Centric
+			// Mode.
+			// The calculations correct the forward and strafe values for field centric
+			// attitude.
+
+			// Rotate the velocity vector from the joystick by the difference between our
+			// current orientation and the current origin heading
+			final double originCorrection = Math.toRadians(originHeading - Constants.navX.getFusedHeading());
+			final double temp = forward * Math.cos(originCorrection) - strafe * Math.sin(originCorrection);
+			strafe = strafe * Math.cos(originCorrection) + forward * Math.sin(originCorrection);
+			forward = temp;
+		}
+
+		this.swerveDrive(strafe, forward, omega, true);
+	}
+
+	public void swerveDrive(double strafe, double forward, double omega, boolean fieldCentric) {
 		double omegaL2 = omega * (WHEEL_BASE_LENGTH / 2.0);
 		double omegaW2 = omega * (WHEEL_BASE_WIDTH / 2.0);
 
@@ -243,19 +296,19 @@ public class Drive extends SubsystemBase {
 	}
 
 	// setting motors
-	public static void setDriveLeftFront(double speed) {
+	public void setDriveLeftFront(double speed) {
 		driveLeftFront.set(ControlMode.PercentOutput, speed);
 	}
 
-	public static void setDriveLeftRear(double speed) {
+	public void setDriveLeftRear(double speed) {
 		driveLeftRear.set(ControlMode.PercentOutput, speed);
 	}
 
-	public static void setDriveRightFront(double speed) {
+	public void setDriveRightFront(double speed) {
 		driveRightFront.set(ControlMode.PercentOutput, speed);
 	}
 
-	public static void setDriveRightRear(double speed) {
+	public void setDriveRightRear(double speed) {
 		driveRightRear.set(ControlMode.PercentOutput, speed);
 	}
 

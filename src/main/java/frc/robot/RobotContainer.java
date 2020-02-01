@@ -14,8 +14,9 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.AutoCommand;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.FieldCentricSwerveDrive;
+// import frc.robot.commands.FieldCentricSwerveDrive;
 import frc.robot.commands.Navx;
 import frc.robot.subsystems.Drive;
 
@@ -29,7 +30,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drive driveSub = new Drive();
 
-  private final FieldCentricSwerveDrive m_autoCommand = new FieldCentricSwerveDrive();
+  private final AutoCommand m_autoCommand = new AutoCommand();
 
   public static Joystick leftJoy;
   public static Joystick rightJoy;
@@ -45,12 +46,17 @@ public class RobotContainer {
     controller = new XboxController(Constants.CONTROLLER);
 
 
-    CommandScheduler.getInstance().setDefaultCommand(driveSub, new DriveCommand(
-        driveSub,
-        () -> leftJoy.getY(Hand.kLeft),
-        () -> leftJoy.getX(Hand.kLeft),
-        () -> rightJoy.getX(Hand.kRight)
-    ));
+    CommandScheduler.getInstance()
+      .setDefaultCommand(
+        driveSub, 
+        new DriveCommand(
+          driveSub,
+          () -> leftJoy.getY(Hand.kLeft),
+          () -> leftJoy.getX(Hand.kLeft),
+          () -> rightJoy.getX(Hand.kRight),
+          leftJoy.getTrigger()   
+        )
+      );
 
     configureButtonBindings();
   }
