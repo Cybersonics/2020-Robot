@@ -45,7 +45,6 @@ public class RobotContainer {
     rightJoy = new Joystick(Constants.RIGHT_JOYSTICK);
     controller = new XboxController(Constants.CONTROLLER);
 
-
     CommandScheduler.getInstance()
       .setDefaultCommand(
         driveSub, 
@@ -76,7 +75,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  public AutoCommand getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     return m_autoCommand;
   }

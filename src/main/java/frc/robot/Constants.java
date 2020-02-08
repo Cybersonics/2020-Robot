@@ -20,18 +20,25 @@ public final class Constants {
     public static final int LEFT_JOYSTICK = 0;
     public static final int RIGHT_JOYSTICK = 1;
     public static final int CONTROLLER = 2;
-  
-    public static final int DRIVE_LEFT_FRONT_TALON = 10;
-    public static final int DRIVE_LEFT_REAR_TALON = 11;
-    public static final int DRIVE_RIGHT_FRONT_TALON = 12;
-    public static final int DRIVE_RIGHT_REAR_TALON = 13;
-    public static final int STEER_LEFT_FRONT_TALON = 16;
-    public static final int STEER_LEFT_REAR_TALON = 17;
-    public static final int STEER_RIGHT_FRONT_TALON = 18;
-    public static final int STEER_RIGHT_REAR_TALON = 19;
     
-    public static AHRS navX; 
-    public static double zeroHeading;
-    public static double zeroAngle;
+    public static final int DRIVE_FRONT_LEFT_STEER_ENCODER = 0;
+    public static final int DRIVE_FRONT_LEFT_STEER_MOTOR = 20;
+    public static final double DRIVE_FRONT_LEFT_STEER_OFFSET = -Math.toRadians(154.3);
+    public static final int DRIVE_FRONT_LEFT_DRIVE_MOTOR = 10;
+
+    public static final int DRIVE_FRONT_RIGHT_STEER_ENCODER = 2;
+    public static final int DRIVE_FRONT_RIGHT_STEER_MOTOR = 22;
+    public static final double DRIVE_FRONT_RIGHT_STEER_OFFSET = -Math.toRadians(329.0);
+    public static final int DRIVE_FRONT_RIGHT_DRIVE_MOTOR = 12;
+
+    public static final int DRIVE_BACK_LEFT_STEER_ENCODER = 1;
+    public static final int DRIVE_BACK_LEFT_STEER_MOTOR = 21;
+    public static final double DRIVE_BACK_LEFT_STEER_OFFSET = -Math.toRadians(218.1);
+    public static final int DRIVE_BACK_LEFT_DRIVE_MOTOR = 11;
+
+    public static final int DRIVE_BACK_RIGHT_STEER_ENCODER = 3;
+    public static final int DRIVE_BACK_RIGHT_STEER_MOTOR = 23;
+    public static final double DRIVE_BACK_RIGHT_STEER_OFFSET = -Math.toRadians(268.9);
+    public static final int DRIVE_BACK_RIGHT_DRIVE_MOTOR = 13;
     
 }
