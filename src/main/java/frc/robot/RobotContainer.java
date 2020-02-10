@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.IntakeIndexerControl;
+import frc.robot.commands.ShooterControl;
+import frc.robot.subsystems.*;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -21,9 +24,18 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
+  /*
+  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  */
+
+  private final IntakeIndexerControl INTAKE_INDEXER_COMMAND = new IntakeIndexerControl();
+  private final ShooterControl SHOOTER_COMMAND = new ShooterControl();
+
+  private final Intake INTAKE_SUBSYSTEM = new Intake();
+  private final Indexer INDEXER_SUBSYSTEM = new Indexer();
+  private final Shooter SHOOTER_SUBSYSTEM = new Shooter();
 
 
 
