@@ -9,7 +9,9 @@ package frc.robot.subsystems;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.function.DoubleSupplier;
 
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -19,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.Navx;
+import edu.wpi.first.wpilibj.RobotController;
 
 public class Drive extends SubsystemBase {
 
@@ -59,6 +62,7 @@ public class Drive extends SubsystemBase {
 	public static final double OMEGA_SCALE = 1.0 / 30.0;
 	private double originHeading = 0.0;
 	private double originCorr = 0;
+	private DoubleSupplier angleSupplier;
 	private final double leftPow = 1.0;
 	private final double rightPow = 1.0;
 
@@ -129,18 +133,19 @@ public class Drive extends SubsystemBase {
 		steerRightFront.setOpenLoopRampRate(RAMP_RATE);
 
 		encoderRightRear = new AnalogInput(Constants.DRIVE_BACK_RIGHT_STEER_ENCODER);
-		// Sets the initial value of the accumulator to 0
-		// This is the "starting point" from which the value will change over time
-		// encoderRightRear.setAccumulatorInitialValue(0);
-		// Sets the "center" of the accumulator to 0.  This value is subtracted from
-		// all measured values prior to accumulation.
-		// encoderRightRear.setAccumulatorCenter(0);
-		// Resets the accumulator to the initial value
-		// encoderRightRear.resetAccumulator();
 		steerRightRear = new CANSparkMax(Constants.DRIVE_BACK_RIGHT_STEER_MOTOR, MotorType.kBrushless);
 		steerRightRear.restoreFactoryDefaults();
 		steerRightRear.setInverted(false);
 		steerRightRear.setOpenLoopRampRate(RAMP_RATE);
+
+		CANPIDController controllerRightRear = steerRightRear.getPIDController();
+		controllerRightRear.setP(1.5);
+        controllerRightRear.setI(0.0);
+        controllerRightRear.setD(0.5);
+
+
+
+
 		/*steerLeftFront = new TalonSRX(Constants.STEER_LEFT_FRONT_TALON);
 		steerLeftFront.configFactoryDefault();
 		steerLeftFront.configSelectedFeedbackSensor(FeedbackDevice.Analog , 0, 0);
@@ -154,8 +159,20 @@ public class Drive extends SubsystemBase {
 		steerLeftFront.setNeutralMode(NeutralMode.Brake);*/
 		// steerLeftFront.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0,
 		// STATUS_FRAME_PERIOD, 0);
-
 		
+		
+	}
+
+
+	public double steerPID( AnalogInput encoder){
+		double angle = (1.0 - encoder.getValue() / ENCODER_COUNT_PER_ROTATION) * 2.0 * Math.PI;
+            //angle += offset;
+            angle %= 2.0 * Math.PI;
+            if (angle < 0.0) {
+                angle += 2.0 * Math.PI;
+            }
+
+            return angle; 
 	}
 
 	public void drive(double leftY, double leftX, double rightX, boolean fieldCentric) {
@@ -255,7 +272,7 @@ public class Drive extends SubsystemBase {
 	}
 
 	private void setSwerveModule(AnalogInput steer, CANSparkMax drive, double angle, double speed) {
-		double currentPosition = steer.getValue();
+		double currentPosition = steerPID(steer);
 		double currentAngle = (currentPosition * 360.0 / ENCODER_COUNT_PER_ROTATION) % 360.0;
 		// The angle from the encoder is in the range [0, 360], but the swerve
 		// computations
