@@ -44,12 +44,14 @@ public class ShooterControl extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // a runs shooter
     if (Robot.xBoxController.getAButton()) 
     {
       ShooterSpeed = 0.9;
       ShooterOne.SetShooterRate(ShooterSpeed);
       ShooterOne.ShooterRun();
     }
+    // b is pivot down
     else if (Robot.xBoxController.getBButton()) 
     {
       ShooterOne.PivotUp();
@@ -60,6 +62,7 @@ public class ShooterControl extends CommandBase {
       ShooterOne.PivotDown();
     }
 
+    // Automatically Locks Pivot
     ShooterOne.PivotShutDown();
 
     if (!Robot.xBoxController.getAButton()){ //epic gamming moment!

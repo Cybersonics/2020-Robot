@@ -49,39 +49,26 @@ public class IntakeIndexerControl extends CommandBase {
   @Override
   public void execute() {
 
-      // Cycling Shutdown 
-
-
-    // Increases the rate of IntakeIn
+    // Intake Runs In
     if(Robot.xBoxController.getPOV() == 90) 
     {
-      intake.IntakeInIncrease();
-      intake.IntakeInIncrease();
-      indexer.RunMotors();
+      intake.intakeStop();
+      intake.intakeRun();
+      indexer.RunMotor();
     } 
-    // Decreases the rate of IntakeIn   
+    // Intake Goes Backward
     else if(Robot.xBoxController.getPOV() == 270) 
     {
-      intake.IntakeInDecrease();
-      intake.IntakeInDecrease();
-      indexer.StopMotors();
+      intake.intakeStop();
+      intake.intakeReverse();
+      indexer.StopMotor();
     }
-    // Increases the rate of IntakeOut  
+    // Intake Shuts off
     else if (Robot.xBoxController.getPOV() == 180) 
     {
-      intake.IntakeOutIncrease();
-      intake.IntakeOutIncrease();
-      indexer.RunMotors();
+      intake.intakeStop();
+      indexer.StopMotor();
     } 
-    // Decreases the rate of IntakeOut  
-    else if (Robot.xBoxController.getPOV() == 0) 
-    {
-      intake.IntakeOutDecrease();
-      intake.IntakeOutDecrease();
-      indexer.StopMotors();
-    } 
-    // Runs the Intake Automatically
-    intake.intakeRun();
   }
 
   // Called once the command ends or is interrupted.

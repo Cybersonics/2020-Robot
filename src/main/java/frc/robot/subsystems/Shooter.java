@@ -59,11 +59,9 @@ public class Shooter extends SubsystemBase {
     {
         // Might be used if necessary (Timer Thing)
         // indexer.CounterShutDown();
-        Indexer.RunMotors();
+        Indexer.RunMotor();
     }
-    else if (Intake.GetIntakeInValue() == 0) {
-      Indexer.StopMotors();
-    }
+
 
   }
 
