@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PWMSparkMax;
+import frc.robot.commands.AutoCommand;
 
 
 /**
@@ -21,9 +22,9 @@ import edu.wpi.first.wpilibj.PWMSparkMax;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
 
   public static XboxController xBoxController;
+  private AutoCommand m_autonomousCommand;
   private RobotContainer m_robotContainer;
 
   /**
@@ -39,6 +40,7 @@ public class Robot extends TimedRobot {
     //instantiates xbox object
     xBoxController = new XboxController(Constants.XBOX_CONTROLLER);
 
+    
   }
 
   /**
@@ -109,7 +111,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
+    // CommandScheduler.getInstance().cancelAll();
   }
 
   /**

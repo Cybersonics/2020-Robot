@@ -38,7 +38,7 @@ public class Intake extends SubsystemBase {
     scheduler = CommandScheduler.getInstance();
     scheduler.registerSubsystem(this);
     
-    intakeMotor = new TalonSRX(Constants.INTAKE_TALON);
+    intakeMotor = new TalonSRX(Constants.INTAKE_VICTOR);
     intakeMotor.configFactoryDefault();
     IntakeIn = 0;
     IntakeOut = 0;
