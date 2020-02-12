@@ -17,9 +17,15 @@ import com.kauailabs.navx.frc.AHRS;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public final static int INTAKE_VICTOR = 5;
+    public final static int INDEXER_VICTOR_ONE = 4;
+    public final static int SHOOTER_SPARK_ONE = 1;
+    public final static int SHOOTER_SPARK_TWO = 2;
+    public final static int PIVOT_TALON = 3;
+
     public static final int LEFT_JOYSTICK = 0;
     public static final int RIGHT_JOYSTICK = 1;
-    public static final int CONTROLLER = 2;
+    public final static int XBOX_CONTROLLER = 2;
     
     public static final int DRIVE_FRONT_LEFT_STEER_ENCODER = 0;
     public static final int DRIVE_FRONT_LEFT_STEER_MOTOR = 20;
