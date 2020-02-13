@@ -22,6 +22,8 @@ public final class Constants {
     public final static int SHOOTER_SPARK_ONE = 6;
     public final static int SHOOTER_SPARK_TWO = 7;
     public final static int PIVOT_SPARK = 8;
+    public final static double MAX_DART_VALUE = 0.0; //needs to be updated
+    public final static double MIN_DART_VALUE = 0.0; //needs to be updated
 
     // Constants for Shooter
     // inches unless stated otherwise
