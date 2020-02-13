@@ -70,11 +70,13 @@ public class Shooter extends SubsystemBase {
   }
 
   public void PivotUp() {
-    PivotMotor.set(ControlMode.PercentOutput, PivotRate);
+    if (PivotMotor.getOutputCurrent() < Constants.MAX_DART_VALUE)
+      PivotMotor.set(ControlMode.PercentOutput, PivotRate);
   }
 
   public void PivotDown() {
-    PivotMotor.set(ControlMode.PercentOutput, -PivotRate);
+    if (PivotMotor.getOutputCurrent() > Constants.MIN_DART_VALUE)
+      PivotMotor.set(ControlMode.PercentOutput, -PivotRate);
   }
 
   public void PivotShutDown() {
