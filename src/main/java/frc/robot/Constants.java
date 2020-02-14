@@ -24,6 +24,8 @@ public final class Constants {
     public final static int PIVOT_SPARK = 8;
     public final static double MAX_DART_VALUE = 0.0; //needs to be updated
     public final static double MIN_DART_VALUE = 0.0; //needs to be updated
+    public final static int SHOOTER_ENCODER = 0;//needs to be changed
+    public final static double SHOOTER_ENCODER_ANGLE_INCREASE = 0.0; //needs to be updated // increase in angle per encoder rotation
 
     // Constants for Shooter
     // inches unless stated otherwise
@@ -36,6 +38,7 @@ public final class Constants {
     public final static double HEXAGON_SIDE = 17.0;//leng of one side of the hexagon
     public final static double LAUNCHER_HEIGHT = 40.0; //height of launcher on robot
     public final static double MAX_ANGLE = 33.0;//hieghest possible angle of shooter
+    public final static double MIN_ANGLE = -4.0;//hieghest possible angle of shooter
     public final static double BEHIND_COLOR_WHEEL_ANGLE = 8.0; //angle of shooter when behind color wheel
     public final static double AUTON_START_SHOOTER_ANGLE = 26.0; //26 deg. when 10ft awy from target
 
