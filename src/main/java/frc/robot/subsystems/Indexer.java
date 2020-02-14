@@ -39,6 +39,7 @@ public class Indexer extends SubsystemBase {
 
     IndexerMotor = new VictorSPX(Constants.INDEXER_VICTOR);
     IndexerMotor.configFactoryDefault();
+
   }
 
   public static void RunMotor(){

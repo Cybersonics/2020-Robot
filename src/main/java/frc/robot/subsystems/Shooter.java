@@ -55,7 +55,7 @@ public class Shooter extends SubsystemBase {
     ShooterMotorOne.restoreFactoryDefaults();
     ShooterMotorTwo = new CANSparkMax(Constants.SHOOTER_SPARK_TWO, MotorType.kBrushless);//maybe parameter needs to be changed
     ShooterMotorTwo.restoreFactoryDefaults();
-    PivotMotor = new TalonSRX(Constants.PIVOT_SPARK);
+    PivotMotor = new TalonSRX(Constants.PIVOT_TALON);
     PivotMotor.configFactoryDefault();
     EncoderInput = new AnalogInput(Constants.SHOOTER_ENCODER);//needs to be changed
     Encoder = new AnalogEncoder(EncoderInput);
