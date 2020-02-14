@@ -14,18 +14,14 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 // import org.usfirst.frc103.Robot2020.Robot;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.Constants;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.*;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 public class Intake extends SubsystemBase {
-  private static TalonSRX intakeMotor;
-  public static double IntakeIn;
-  public double IntakeOut;
-  public final double DEADZONE = 0.07;
-  public final double RAMP_UP_RATE = 0.3;
-  public final double RAMP_DOWN_RATE = 0.25;
   public final int INTERVAL_OF_STOPS = 100;
   public double UntilStop;
+  public VictorSPX intakeMotor;
 
   private CommandScheduler scheduler;
 
@@ -38,85 +34,20 @@ public class Intake extends SubsystemBase {
     scheduler = CommandScheduler.getInstance();
     scheduler.registerSubsystem(this);
     
-    intakeMotor = new TalonSRX(Constants.INTAKE_VICTOR);
+    intakeMotor = new VictorSPX(Constants.INTAKE_VICTOR);
     intakeMotor.configFactoryDefault();
-    IntakeIn = 0;
-    IntakeOut = 0;
   }
 
   public void intakeRun() {
-    if ((IntakeIn > 0 && IntakeOut > 0) || (IntakeIn < DEADZONE && IntakeOut < DEADZONE)) 
-    {
-      intakeMotor.set(ControlMode.PercentOutput, 0.0);
-    } 
-    else 
-    {
-      if ((IntakeIn > 0)&&(Robot.xBoxController.getYButton()))
-      {
-         intakeMotor.set(ControlMode.PercentOutput, -IntakeIn);
-      } 
-      else if (IntakeIn > 0)
-      {
-          intakeMotor.set(ControlMode.PercentOutput, -(IntakeIn * RAMP_UP_RATE));
-      }
-    }
-    if (IntakeOut > 0)
-    {
-        intakeMotor.set(ControlMode.PercentOutput, IntakeOut * RAMP_DOWN_RATE);
-    }
+    intakeMotor.set(ControlMode.PercentOutput, 1.0);
   }
 
-  
-  public void IntakeInIncrease()
-  {
-    IntakeIn+=0.1;
+  public void intakeReverse() {
+    intakeMotor.set(ControlMode.PercentOutput, -1.0);
   }
 
-  public void IntakeInDecrease()
-  {
-    IntakeIn-=0.1;
-  }
-
-  public void IntakeOutIncrease()
-  {
-    IntakeOut+=0.1;
-  }
-
-  public void IntakeOutDecrease()
-  {
-    IntakeIn-=0.1;
-  }
-
-  public void SetIntakes(double IntakeIn, double IntakeOut){
-    this.IntakeIn = IntakeIn;
-    this.IntakeOut = IntakeOut;
-  }
-
-  // Moving to Sewcond Motor on Indexer
-  /*
-  public void CounterShutDown(){
-    double PreviousIntakeIn = IntakeIn;
-    UntilStop += 1;
-    if (UntilStop > INTERVAL_OF_STOPS)
-    {
-      IntakeIn = 0;
-      Robot.intake.LengthOfPause();
-      IntakeIn = PreviousIntakeIn;
-    }
-  }
-
-  public void LengthOfPause(){
-    UntilStop -= 2;
-    if (UntilStop > 0)
-    {
-      IntakeIn = 0;
-      Robot.intake.LengthOfPause();
-    }
-  }
-  */
-
-  public static double GetIntakeInValue(){
-  return IntakeIn;
+  public void intakeStop() {
+    intakeMotor.set(ControlMode.PercentOutput, 0);
   }
 
   @Override
