@@ -13,15 +13,18 @@ import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.Navx;
-import edu.wpi.first.wpilibj.RobotController;
 
 public class Drive extends SubsystemBase {
 
@@ -36,15 +39,24 @@ public class Drive extends SubsystemBase {
 	private static CANSparkMax steerRightFront;
 	private static CANSparkMax steerRightRear;
 
-	private static AnalogInput encoderLeftFront;
-	private static AnalogInput encoderLeftRear;
-	private static AnalogInput encoderRightFront;
-	private static AnalogInput encoderRightRear;
+	private static AnalogInput inputLeftFront;
+	private static AnalogInput inputLeftRear;
+	private static AnalogInput inputRightFront;
+	private static AnalogInput inputRightRear;
+	
+	private static AnalogEncoder encoderLeftFront;
+	private static AnalogEncoder encoderLeftRear;
+	private static AnalogEncoder encoderRightFront;
+	private static AnalogEncoder encoderRightRear;
 
+	private static PIDController steerLeftFrontPID;
+	private static PIDController steerLeftRearPID;
+	private static PIDController steerRightFrontPID;
+	private static PIDController steerRightRearPID;
 
 	public static final double WHEEL_BASE_LENGTH = 20; // 28.0;
 	public static final double WHEEL_BASE_WIDTH = 24; // 22.0;
-	public static final double ENCODER_COUNT_PER_ROTATION = 1024.0;
+	public static final double ENCODER_COUNT_PER_ROTATION = 4096.0;
 
 	public static final double WHEEL_DIAMETER = 4.0;
 	// TODO: increase MAX_SPEED
@@ -54,8 +66,7 @@ public class Drive extends SubsystemBase {
 	public static final double DEADZONE = 0.08;
 	public static final double MAX_REVERSIBLE_SPEED_DIFFERENCE = 0.5 * MAX_SPEED;
 
-	// private static final double STEER_P = 10.0, STEER_I = 0.02, STEER_D = 0.0;
-	private static final double STEER_P = 0.4, STEER_I = 0.0, STEER_D = 0.0;
+	private static final double STEER_P = 0.25, STEER_I = 0.00, STEER_D = 0.00;
 	private static final int STATUS_FRAME_PERIOD = 5;
 	private static final double RAMP_RATE = 0.5;
 
@@ -90,61 +101,41 @@ public class Drive extends SubsystemBase {
 		driveRightRear.setInverted(false);
 		driveRightRear.setOpenLoopRampRate(RAMP_RATE);
 
-		encoderLeftFront = new AnalogInput(Constants.DRIVE_FRONT_LEFT_STEER_ENCODER);
-		// Sets the initial value of the accumulator to 0
-		// This is the "starting point" from which the value will change over time
-		// encoderLeftFront.setAccumulatorInitialValue(0);
-		// Sets the "center" of the accumulator to 0.  This value is subtracted from
-		// all measured values prior to accumulation.
-		// encoderLeftFront.setAccumulatorCenter(0);
-		// Resets the accumulator to the initial value
-		// encoderLeftFront.resetAccumulator();
+		inputLeftFront = new AnalogInput(Constants.DRIVE_FRONT_LEFT_STEER_ENCODER);
 		steerLeftFront = new CANSparkMax(Constants.DRIVE_FRONT_LEFT_STEER_MOTOR, MotorType.kBrushless);
 		steerLeftFront.restoreFactoryDefaults();
 		steerLeftFront.setInverted(false);
 		steerLeftFront.setOpenLoopRampRate(RAMP_RATE);
 
-		encoderLeftRear = new AnalogInput(Constants.DRIVE_BACK_LEFT_STEER_ENCODER);
-		// Sets the initial value of the accumulator to 0
-		// This is the "starting point" from which the value will change over time
-		// encoderLeftRear.setAccumulatorInitialValue(0);
-		// Sets the "center" of the accumulator to 0.  This value is subtracted from
-		// all measured values prior to accumulation.
-		// encoderLeftRear.setAccumulatorCenter(0);
-		// Resets the accumulator to the initial value
-		// encoderLeftRear.resetAccumulator();
+		inputLeftRear = new AnalogInput(Constants.DRIVE_BACK_LEFT_STEER_ENCODER);
 		steerLeftRear = new CANSparkMax(Constants.DRIVE_BACK_LEFT_STEER_MOTOR, MotorType.kBrushless);
 		steerLeftRear.restoreFactoryDefaults();
 		steerLeftRear.setInverted(false);
 		steerLeftRear.setOpenLoopRampRate(RAMP_RATE);
 
-		encoderRightFront = new AnalogInput(Constants.DRIVE_FRONT_RIGHT_STEER_ENCODER);
-		// Sets the initial value of the accumulator to 0
-		// This is the "starting point" from which the value will change over time
-		// encoderRightFront.setAccumulatorInitialValue(0);
-		// Sets the "center" of the accumulator to 0.  This value is subtracted from
-		// all measured values prior to accumulation.
-		// encoderRightFront.setAccumulatorCenter(0);
-		// Resets the accumulator to the initial value
-		// encoderRightFront.resetAccumulator();
+		inputRightFront = new AnalogInput(Constants.DRIVE_FRONT_RIGHT_STEER_ENCODER);
 		steerRightFront = new CANSparkMax(Constants.DRIVE_FRONT_RIGHT_STEER_MOTOR, MotorType.kBrushless);
 		steerRightFront.restoreFactoryDefaults();
 		steerRightFront.setInverted(false);
 		steerRightFront.setOpenLoopRampRate(RAMP_RATE);
 
-		encoderRightRear = new AnalogInput(Constants.DRIVE_BACK_RIGHT_STEER_ENCODER);
+		inputRightRear = new AnalogInput(Constants.DRIVE_BACK_RIGHT_STEER_ENCODER);
 		steerRightRear = new CANSparkMax(Constants.DRIVE_BACK_RIGHT_STEER_MOTOR, MotorType.kBrushless);
 		steerRightRear.restoreFactoryDefaults();
 		steerRightRear.setInverted(false);
 		steerRightRear.setOpenLoopRampRate(RAMP_RATE);
 
-		CANPIDController controllerRightRear = steerRightRear.getPIDController();
-		controllerRightRear.setP(1.5);
-        controllerRightRear.setI(0.0);
-        controllerRightRear.setD(0.5);
+		steerLeftFrontPID = new PIDController(STEER_P, STEER_I, STEER_D);
+		steerLeftFrontPID.enableContinuousInput(0, ENCODER_COUNT_PER_ROTATION);
 
+		steerLeftRearPID = new PIDController(STEER_P, STEER_I, STEER_D);
+		steerLeftRearPID.enableContinuousInput(0, ENCODER_COUNT_PER_ROTATION);
 
+		steerRightFrontPID = new PIDController(STEER_P, STEER_I, STEER_D);
+		steerRightFrontPID.enableContinuousInput(0, ENCODER_COUNT_PER_ROTATION);
 
+		steerRightRearPID =  new PIDController(STEER_P, STEER_I, STEER_D);
+		steerRightRearPID.enableContinuousInput(0, ENCODER_COUNT_PER_ROTATION);
 
 		/*steerLeftFront = new TalonSRX(Constants.STEER_LEFT_FRONT_TALON);
 		steerLeftFront.configFactoryDefault();
@@ -164,7 +155,7 @@ public class Drive extends SubsystemBase {
 	}
 
 
-	public double steerPID( AnalogInput encoder){
+	public double steerPID(AnalogInput encoder){
 		double angle = (1.0 - encoder.getValue() / ENCODER_COUNT_PER_ROTATION) * 2.0 * Math.PI;
             //angle += offset;
             angle %= 2.0 * Math.PI;
@@ -178,10 +169,6 @@ public class Drive extends SubsystemBase {
 	public void drive(double leftY, double leftX, double rightX, boolean fieldCentric) {
 		// final double originOffset = 360 - originHeading;
 		// originCorr = Constants.navX.getFusedHeading() + originOffset;
-
-		SmartDashboard.putNumber("leftY: ", leftY);
-		SmartDashboard.putNumber("leftX: ", leftX);
-		SmartDashboard.putNumber("rightX: ", rightX);
 
 		double strafe = Math.pow(Math.abs(leftX), leftPow)
 				* Math.signum(leftX);
@@ -222,6 +209,11 @@ public class Drive extends SubsystemBase {
 			forward = temp;
 		}
 
+
+		// SmartDashboard.putNumber("strafe: ", strafe);
+		// SmartDashboard.putNumber("forward: ", forward);
+		// SmartDashboard.putNumber("omega: ", omega);
+
 		this.swerveDrive(strafe, forward, omega, true);
 	}
 
@@ -257,10 +249,10 @@ public class Drive extends SubsystemBase {
 		double maxSpeed = Collections.max(Arrays.asList(speedLF, speedLR, speedRF, speedRR, 1.0));
 
 		// Set each swerve module, scaling the drive speeds by the maximum speed
-		setSwerveModule(encoderLeftFront, driveLeftFront, angleLF, speedLF / maxSpeed);
-		setSwerveModule(encoderLeftRear, driveLeftRear, angleLR, speedLR / maxSpeed);
-		setSwerveModule(encoderRightFront, driveRightFront, angleRF, speedRF / maxSpeed);
-		setSwerveModule(encoderRightRear, driveRightRear, angleRR, speedRR / maxSpeed);
+		setSwerveModule("LeftFront", inputLeftFront, steerLeftFrontPID, driveLeftFront, steerLeftFront, angleLF, speedLF / maxSpeed);
+		setSwerveModule("LeftRear", inputLeftRear, steerLeftRearPID, driveLeftRear, steerLeftRear, angleLR, speedLR / maxSpeed);
+		setSwerveModule("RightFront", inputRightFront, steerRightFrontPID, driveRightFront, steerRightFront, angleRF, speedRF / maxSpeed);
+		setSwerveModule("RightRear", inputRightRear, steerRightRearPID ,driveRightRear, steerRightRear, angleRR, speedRR / maxSpeed);
 	}
 
 	private double speed(double val1, double val2) {
@@ -271,8 +263,9 @@ public class Drive extends SubsystemBase {
 		return Math.toDegrees(Math.atan2(val1, val2));
 	}
 
-	private void setSwerveModule(AnalogInput steer, CANSparkMax drive, double angle, double speed) {
-		double currentPosition = steerPID(steer);
+	private void setSwerveModule(String driveName, AnalogInput steerAnalogIn, PIDController pidController, CANSparkMax drive, CANSparkMax steer, double angle, double speed) {
+		double currentPosition = steerAnalogIn.getValue();
+		
 		double currentAngle = (currentPosition * 360.0 / ENCODER_COUNT_PER_ROTATION) % 360.0;
 		// The angle from the encoder is in the range [0, 360], but the swerve
 		// computations
@@ -295,17 +288,26 @@ public class Drive extends SubsystemBase {
 		// only rotate by the complement
 
 		// if (Math.abs(speed) <= MAX_SPEED){
-		if (Math.abs(deltaDegrees) > 90.0) {
-			deltaDegrees -= 180.0 * Math.signum(deltaDegrees);
-			speed = -speed;
-		}
+		// if (Math.abs(deltaDegrees) > 90.0) {
+		// 	deltaDegrees -= 180.0 * Math.signum(deltaDegrees);
+		// 	speed = -speed;
+		// }
 		// }
 
 		double targetPosition = currentPosition + deltaDegrees * ENCODER_COUNT_PER_ROTATION / 360.0;
-		steer.setAccumulatorInitialValue((long)targetPosition);
-		//(ControlMode.Position, targetPosition);
-		drive.getEncoder().setPosition(speed);
-		//(ControlMode.PercentOutput, speed);
+		pidController.setSetpoint(targetPosition);
+		double pidOut = pidController.calculate(currentPosition, targetPosition);
+		double outVal = pidOut / 4096;
+
+		steer.set(outVal);
+		drive.set(speed);
+
+		SmartDashboard.putNumber("currentPosition", currentPosition);
+		SmartDashboard.putNumber("Setpoint", targetPosition);
+
+		 SmartDashboard.putNumber("PID Out: ", pidOut);
+		 SmartDashboard.putNumber("Out", outVal);
+		// SmartDashboard.putNumber("speed: ", speed);
 
 	}
 
@@ -327,61 +329,86 @@ public class Drive extends SubsystemBase {
 	}
 
 	public double getSteerLFEncoder() {
-		return encoderLeftFront.getValue();
+		return inputLeftFront.getValue();
 	}
 
 	public double getSteerLREncoder() {
-		return encoderLeftRear.getValue();
+		return inputLeftRear.getValue();
 	}
 
 	public double getSteerRFEncoder() {
-		return encoderRightFront.getValue();
+		return inputRightFront.getValue();
 	}
 
 	public double getSteerRREncoder() {
-		return encoderRightRear.getValue();
+		return inputRightRear.getValue();
 	}
 
 	// setting motors
 	public void setDriveLeftFront(double speed) {
-		// driveLeftFront.set(ControlMode.PercentOutput, speed);
+		driveLeftFront.getEncoder().setPosition(speed);
 	}
 
 	public void setDriveLeftRear(double speed) {
-		// driveLeftRear.set(ControlMode.PercentOutput, speed);
+		driveLeftRear.getEncoder().setPosition(speed);
 	}
 
 	public void setDriveRightFront(double speed) {
-		// driveRightFront.set(ControlMode.PercentOutput, speed);
+		driveRightFront.getEncoder().setPosition(speed);
 	}
 
 	public void setDriveRightRear(double speed) {
-		// driveRightRear.set(ControlMode.PercentOutput, speed);
+		driveRightRear.getEncoder().setPosition(speed);
 	}
 
 	public void setSteerLeftFront(double speed) {
-		// steerLeftFront.set(ControlMode.PercentOutput, speed);
+		inputLeftFront.setAccumulatorInitialValue((long)speed);
+		steerLeftFront.getEncoder().setPosition(speed);
 	}
 
 	public void setSteerLeftRear(double speed) {
-		// steerLeftRear.set(ControlMode.PercentOutput, speed);
+		inputLeftRear.setAccumulatorInitialValue((long)speed);
+		steerLeftRear.getEncoder().setPosition(speed);
 	}
 
 	public void setSteerRightFront(double speed) {
-		// steerRightFront.set(ControlMode.PercentOutput, speed);
+		inputRightFront.setAccumulatorInitialValue((long)speed);
+		steerRightFront.getEncoder().setPosition(speed);
 	}
 
 	public void setSteerRightRear(double speed) {
-		// steerRightRear.set(ControlMode.PercentOutput, speed);
+		inputRightRear.setAccumulatorInitialValue((long)speed);
+		steerRightRear.getEncoder().setPosition(speed);
 	}
 
 	public void encoderReset() {
-		// encoderRightRear.resetAccumulator();
-		// encoderRightFront.resetAccumulator();
-		// encoderLeftRear.resetAccumulator();
-		// encoderLeftFront.resetAccumulator();
+		inputRightRear.resetAccumulator();
+		inputRightFront.resetAccumulator();
+		inputLeftRear.resetAccumulator();
+		inputLeftFront.resetAccumulator();
 	}
 
+	public static double[] getEncoderValues() {
+		double[] values = new double[] {
+			inputLeftFront.getValue(),
+			inputLeftRear.getValue(),
+			inputRightFront.getValue(),
+			inputRightRear.getValue()
+		};
+
+		return values;
+	}
+
+	public static double[] getEncoderVal() {
+		double[] values = new double[] {
+			inputLeftFront.pidGet() ,
+			inputLeftRear.pidGet(),
+			inputRightFront.pidGet(),
+			inputRightRear.pidGet()
+		};
+
+		return values;
+	}
 	public void initDefaultCommand() {
 	}
 
