@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.IntakeIndexerControl;
+import frc.robot.commands.ShooterControl;
+import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutoCommand;
@@ -28,6 +31,18 @@ import frc.robot.subsystems.Drive;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+
+  /*
+  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  */
+
+  private final IntakeIndexerControl INTAKE_INDEXER_COMMAND = new IntakeIndexerControl();
+  private final ShooterControl SHOOTER_COMMAND = new ShooterControl();
+
+  private final Intake INTAKE_SUBSYSTEM = new Intake();
+  private final Indexer INDEXER_SUBSYSTEM = new Indexer();
+  private final Shooter SHOOTER_SUBSYSTEM = new Shooter();
   private final Drive driveSub = new Drive();
 
   private final AutoCommand m_autoCommand = new AutoCommand();
@@ -43,7 +58,7 @@ public class RobotContainer {
     // Configure the button bindings
     leftJoy = new Joystick(Constants.LEFT_JOYSTICK);
     rightJoy = new Joystick(Constants.RIGHT_JOYSTICK);
-    controller = new XboxController(Constants.CONTROLLER);
+    controller = new XboxController(Constants.XBOX_CONTROLLER);
 
     CommandScheduler.getInstance()
       .setDefaultCommand(
