@@ -8,20 +8,20 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.IntakeIndexerControl;
-import frc.robot.commands.ShooterControl;
-import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutoCommand;
 import frc.robot.commands.DriveCommand;
-// import frc.robot.commands.FieldCentricSwerveDrive;
+import frc.robot.commands.IntakeIndexerControl;
 import frc.robot.commands.Navx;
+import frc.robot.commands.ShooterControl;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -36,20 +36,20 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   */
-
-  private final IntakeIndexerControl INTAKE_INDEXER_COMMAND = new IntakeIndexerControl();
-  private final ShooterControl SHOOTER_COMMAND = new ShooterControl();
-
-  private final Intake INTAKE_SUBSYSTEM = new Intake();
-  private final Indexer INDEXER_SUBSYSTEM = new Indexer();
-  private final Shooter SHOOTER_SUBSYSTEM = new Shooter();
-  private final Drive driveSub = new Drive();
+  
+  private final Intake _intake_subsystem = new Intake();
+  private final Indexer _indexer_subsystem = new Indexer();
+  private final Shooter _shooter_subsystem = new Shooter();
+  private final Drive _drive_subsystem = new Drive();
+  
+    private final IntakeIndexerControl _intake_indexer_command = new IntakeIndexerControl(_intake_subsystem, _indexer_subsystem);
+    private final ShooterControl _shooter_command = new ShooterControl(_shooter_subsystem);
 
   private final AutoCommand m_autoCommand = new AutoCommand();
 
   public static Joystick leftJoy;
   public static Joystick rightJoy;
-  public XboxController controller;
+  public XboxController xboxController;
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -58,13 +58,13 @@ public class RobotContainer {
     // Configure the button bindings
     leftJoy = new Joystick(Constants.LEFT_JOYSTICK);
     rightJoy = new Joystick(Constants.RIGHT_JOYSTICK);
-    controller = new XboxController(Constants.XBOX_CONTROLLER);
+    xboxController = new XboxController(Constants.XBOX_CONTROLLER);
 
     CommandScheduler.getInstance()
       .setDefaultCommand(
-        driveSub, 
+        _drive_subsystem, 
         new DriveCommand(
-          driveSub,
+          _drive_subsystem,
           () -> leftJoy.getY(Hand.kLeft),
           () -> leftJoy.getX(Hand.kLeft),
           () -> rightJoy.getX(Hand.kRight),
@@ -82,7 +82,20 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-  new JoystickButton(leftJoy, 7).whenPressed(() -> Navx.getInstance().getFuzedHeading());
+    new JoystickButton(leftJoy, 7).whenPressed(() -> Navx.getInstance().getFuzedHeading());
+
+    new JoystickButton(xboxController, 1).whenPressed(() -> _intake_indexer_command.indexerForward());
+    new JoystickButton(xboxController, 1).whenReleased(() -> _intake_indexer_command.indexerStop());
+    new JoystickButton(xboxController, 2).whenPressed(() -> _intake_indexer_command.indexerReverse());
+    new JoystickButton(xboxController, 2).whenReleased(() -> _intake_indexer_command.indexerStop());
+
+    new JoystickButton(xboxController, 3).whenPressed(() -> _intake_indexer_command.intakeForward());
+    new JoystickButton(xboxController, 3).whenReleased(() -> _intake_indexer_command.intakeStop());
+    new JoystickButton(xboxController, 4).whenPressed(() -> _intake_indexer_command.intakeReverse());
+    new JoystickButton(xboxController, 4).whenReleased(() -> _intake_indexer_command.intakeStop());
+
+    new JoystickButton(xboxController, 6).whenPressed(() -> _shooter_command.fire());
+    new JoystickButton(xboxController, 6).whenReleased(() -> _shooter_command.stop());
   }
 
   /**

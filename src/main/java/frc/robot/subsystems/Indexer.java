@@ -7,20 +7,12 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-//import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.*;
-import frc.robot.Constants;
-import com.revrobotics.CANError;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
-
-
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Indexer extends SubsystemBase {
 
@@ -42,11 +34,14 @@ public class Indexer extends SubsystemBase {
 
   }
 
-  public static void RunMotor(){
+  public void forward(){
     IndexerMotor.set(ControlMode.PercentOutput, 1.0);
   } 
+  public void reverse(){
+    IndexerMotor.set(ControlMode.PercentOutput, -1.0);
+  } 
 
-  public static void StopMotor(){
+  public void StopMotor(){
     IndexerMotor.set(ControlMode.PercentOutput,0);
   }    
  

@@ -7,13 +7,10 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Indexer;
-import frc.robot.Robot;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-// import edu.wpi.first.wpilibj.command.Command;
-//import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
 
 /**
  * An example command that uses an example subsystem.
@@ -21,27 +18,48 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 public class IntakeIndexerControl extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-  Intake intake;
-  Indexer indexer;
+  Intake _intake;
+  Indexer _indexer;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public IntakeIndexerControl() {
+  public IntakeIndexerControl(Intake intake, Indexer indexer) {
     // Creating new Intake object
-    intake = new Intake();
+    _intake = intake;
     
     // Creating new Indexer object
-    indexer = new Indexer();
+    _indexer = indexer;
+
+    CommandScheduler.getInstance().requiring(intake);
+    CommandScheduler.getInstance().requiring(indexer);
   }
 
+public void intakeForward() {
+  _intake.intakeRun();
+}
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  }
+public void intakeReverse() {
+  _intake.intakeReverse();
+}
+
+public void intakeStop() {
+  _intake.intakeStop();
+}
+
+public void indexerForward() {
+  _indexer.forward();
+}
+
+public void indexerReverse() {
+  _indexer.reverse();
+}
+
+public void indexerStop() {
+  _indexer.StopMotor();
+}
 
 
 
@@ -49,26 +67,26 @@ public class IntakeIndexerControl extends CommandBase {
   @Override
   public void execute() {
 
-    // Intake Runs In
-    if(Robot.xBoxController.getPOV() == 90) 
-    {
-      intake.intakeStop();
-      intake.intakeRun();
-      indexer.RunMotor();
-    } 
-    // Intake Goes Backward
-    else if(Robot.xBoxController.getPOV() == 270) 
-    {
-      intake.intakeStop();
-      intake.intakeReverse();
-      indexer.StopMotor();
-    }
-    // Intake Shuts off
-    else if (Robot.xBoxController.getPOV() == 180) 
-    {
-      intake.intakeStop();
-      indexer.StopMotor();
-    } 
+    // // Intake Runs In
+    // if(Robot.xBoxController.getPOV() == 90) 
+    // {
+    //   intake.intakeStop();
+    //   intake.intakeRun();
+    //   indexer.RunMotor();
+    // } 
+    // // Intake Goes Backward
+    // else if(Robot.xBoxController.getPOV() == 270) 
+    // {
+    //   intake.intakeStop();
+    //   intake.intakeReverse();
+    //   indexer.StopMotor();
+    // }
+    // // Intake Shuts off
+    // else if (Robot.xBoxController.getPOV() == 180) 
+    // {
+    //   intake.intakeStop();
+    //   indexer.StopMotor();
+    // } 
   }
 
   // Called once the command ends or is interrupted.

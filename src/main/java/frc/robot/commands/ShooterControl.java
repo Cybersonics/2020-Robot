@@ -8,9 +8,9 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.Shooter;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**
  * An example command that uses an example subsystem.
@@ -20,7 +20,7 @@ public class ShooterControl extends CommandBase {
   public double ShooterSpeed = 0.9;
   public double Pivot = 0.9;
 
-  Shooter ShooterOne;
+  Shooter _shooter;
 
   
 
@@ -29,11 +29,19 @@ public class ShooterControl extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ShooterControl() {
+  public ShooterControl(Shooter shooter) {
+    _shooter = shooter;
+
+    CommandScheduler.getInstance().requiring(shooter);
     
-    // Creating new Shooter object
-    ShooterOne = new Shooter();
-    
+  }
+
+  public void fire() {
+      _shooter.launch();
+  }
+
+  public void stop() {
+      _shooter.stop();
   }
 
   // Called when the command is initially scheduled.
@@ -45,34 +53,34 @@ public class ShooterControl extends CommandBase {
   @Override
   public void execute() {
     // a runs shooter
-    if (Robot.xBoxController.getAButton()) 
-    {
-      ShooterSpeed = 0.9;
-      ShooterOne.SetShooterRate(ShooterSpeed);
-      ShooterOne.ShooterRun();
-    }
-    // b is pivot down
-    else if (Robot.xBoxController.getBButton()) 
-    {
-      ShooterOne.PivotUp();
-    }
-    // x is to Pivot Down
-    else if (Robot.xBoxController.getXButton()) 
-    {
-      ShooterOne.PivotDown();
-    }
+//     if (Robot.xBoxController.getAButton()) 
+//     {
+//       ShooterSpeed = 0.9;
+//       ShooterOne.SetShooterRate(ShooterSpeed);
+//       ShooterOne.ShooterRun();
+//     }
+//     // b is pivot down
+//     else if (Robot.xBoxController.getBButton()) 
+//     {
+//       ShooterOne.PivotUp();
+//     }
+//     // x is to Pivot Down
+//     else if (Robot.xBoxController.getXButton()) 
+//     {
+//       ShooterOne.PivotDown();
+//     }
 
-    // Automatically Locks Pivot
-    ShooterOne.PivotShutDown();
+//     // Automatically Locks Pivot
+//     ShooterOne.PivotShutDown();
 
-    if (!Robot.xBoxController.getAButton()){ //epic gamming moment!
-      ShooterSpeed = 0; // f's in the chat for the shooter speed
-      ShooterOne.SetShooterRate(ShooterSpeed); // begone ShooterSpeed
-      ShooterOne.ShooterRun(); // wow u r such noob Shooterspeed uwu
-    }
+//     if (!Robot.xBoxController.getAButton()){ //epic gamming moment!
+//       ShooterSpeed = 0; // f's in the chat for the shooter speed
+//       ShooterOne.SetShooterRate(ShooterSpeed); // begone ShooterSpeed
+//       ShooterOne.ShooterRun(); // wow u r such noob Shooterspeed uwu
+//     }
 
 
-  //Curreently the Pivot is Manual, but later it can be done with a sensor
+//   //Curreently the Pivot is Manual, but later it can be done with a sensor
   }
 
 

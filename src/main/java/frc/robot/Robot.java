@@ -8,11 +8,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PWMSparkMax;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.AutoCommand;
 import frc.robot.subsystems.Drive;
 
@@ -140,6 +138,5 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber(("LeftRear Analog position: "), encoder[1]);
 		SmartDashboard.putNumber(("RightFront Analog position: "), encoder[2]);
 		SmartDashboard.putNumber(("RightRear Analog position: "), encoder[3]);
-
   }
 }
