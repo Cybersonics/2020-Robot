@@ -382,27 +382,27 @@ public class Drive extends SubsystemBase {
 	// 	inputLeftFront.resetAccumulator();
 	// }
 
-	public static double[] getEncoderValues() {
-		double[] values = new double[] {
-			inputLeftFront.getValue(),
-			inputLeftRear.getValue(),
-			inputRightFront.getValue(),
-			inputRightRear.getValue()
-		};
+	// public static double[] getEncoderValues() {
+	// 	double[] values = new double[] {
+	// 		inputLeftFront.getValue(),
+	// 		inputLeftRear.getValue(),
+	// 		inputRightFront.getValue(),
+	// 		inputRightRear.getValue()
+	// 	};
 
-		return values;
-	}
+	// 	return values;
+	// }
 
-	public static double[] getEncoderVal() {
-		double[] values = new double[] {
-			inputLeftFront.pidGet() ,
-			inputLeftRear.pidGet(),
-			inputRightFront.pidGet(),
-			inputRightRear.pidGet()
-		};
+	// public static double[] getEncoderVal() {
+	// 	double[] values = new double[] {
+	// 		inputLeftFront.pidGet() ,
+	// 		inputLeftRear.pidGet(),
+	// 		inputRightFront.pidGet(),
+	// 		inputRightRear.pidGet()
+	// 	};
 
-		return values;
-	}
+	// 	return values;
+	// }
 	public void initDefaultCommand() {
 	}
 

@@ -2,17 +2,20 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.DrivetrainSubsystem;
 
 import java.util.function.DoubleSupplier;
 
+import org.frcteam2910.common.math.Vector2;
+
 public class DriveCommand extends CommandBase {
-    private final Drive drivetrain;
+    private final DrivetrainSubsystem drivetrain;
     private final DoubleSupplier forward;
     private final DoubleSupplier strafe;
     private final DoubleSupplier rotation;
     private final boolean fieldCentric;
 
-    public DriveCommand(Drive drivetrain,
+    public DriveCommand(DrivetrainSubsystem drivetrain,
                         DoubleSupplier forward,
                         DoubleSupplier strafe,
                         DoubleSupplier rotation,
@@ -28,9 +31,11 @@ public class DriveCommand extends CommandBase {
 
 	@Override
     public void execute() {
-        drivetrain.drive(
+        drivetrain.drive(    
+            new Vector2(
                 forward.getAsDouble(),
-                strafe.getAsDouble(),
+                strafe.getAsDouble()
+            ),
                 rotation.getAsDouble(),
                 fieldCentric                
         );
@@ -38,6 +43,6 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        drivetrain.drive(0.0, 0.0, 0.0, false);
+        drivetrain.drive(Vector2.ZERO, 0.0, false);
     }
 }
