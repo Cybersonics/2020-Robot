@@ -15,41 +15,40 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
 
-    private static NetworkTableInstance Table;
-    private static NetworkTable CameraTable;
-    private static NetworkTableEntry Yaw;
-    private static NetworkTableEntry Pitch;
-    private static NetworkTableEntry Roll;
+    private NetworkTableEntry _yaw;
+    private NetworkTableEntry _pitch;
+    private NetworkTableEntry _roll;
 
+    private final String LifeCamHD = "LifeCamHD";
+  private final String defaultCameraTableName = "/chameleon-vision/" + LifeCamHD;
+  private final NetworkTable _chameleonVisionTable = NetworkTableInstance.getDefault().getTable(defaultCameraTableName);
 
-    private CommandScheduler scheduler;
-    /**
-    * Creates a new ExampleSubsystem.
-    */
     public Vision () {
-        Table = NetworkTableInstance.getDefault();
-        CameraTable = Table.getTable("chameleon-vision").getSubTable("MyCamName");
-        Yaw = CameraTable.getEntry("yaw");
-        Pitch = CameraTable.getEntry("pitch");
-        Roll = CameraTable.getEntry("roll");
+        CommandScheduler.getInstance().registerSubsystem(this);
+        
+        _yaw = _chameleonVisionTable.getEntry("yaw");
+        _pitch = _chameleonVisionTable.getEntry("pitch");
+        _roll = _chameleonVisionTable.getEntry("roll");
 
-        scheduler = CommandScheduler.getInstance();
-        scheduler.registerSubsystem(this);
     }
 
-    public static double getYaw(){
-        Yaw = CameraTable.getEntry("yaw");
-        return Yaw.getDouble(0.0);
+    public double getYaw(){
+        return _yaw.getDouble(0.0);
     }
 
-    public static double getPitch(){
-        Pitch = CameraTable.getEntry("pitch");
-        return Pitch.getDouble(0.0);
+    public double getPitch(){
+        return _pitch.getDouble(0.0);
     }
 
-    public static double getRoll(){
-        Roll = CameraTable.getEntry("roll");
-        return Roll.getDouble(0.0);
+    public double getRoll(){
+        return _roll.getDouble(0.0);
+    }
+
+    @Override
+    public void periodic() {
+        _yaw = _chameleonVisionTable.getEntry("yaw");
+        _pitch = _chameleonVisionTable.getEntry("pitch");
+        _roll = _chameleonVisionTable.getEntry("roll");
     }
 
 }

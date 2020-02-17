@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import com.google.errorprone.annotations.concurrent.GuardedBy;
-
 import static frc.robot.Constants.DRIVE_BACK_LEFT_DRIVE_MOTOR;
 import static frc.robot.Constants.DRIVE_BACK_LEFT_STEER_ENCODER;
 import static frc.robot.Constants.DRIVE_BACK_LEFT_STEER_MOTOR;
@@ -19,8 +17,8 @@ import static frc.robot.Constants.DRIVE_FRONT_RIGHT_STEER_ENCODER;
 import static frc.robot.Constants.DRIVE_FRONT_RIGHT_STEER_MOTOR;
 import static frc.robot.Constants.DRIVE_FRONT_RIGHT_STEER_OFFSET;
 
+import com.google.errorprone.annotations.concurrent.GuardedBy;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import org.frcteam2910.common.drivers.SwerveModule;
