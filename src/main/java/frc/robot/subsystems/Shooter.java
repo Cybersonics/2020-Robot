@@ -39,7 +39,7 @@ public class Shooter extends SubsystemBase {
    * Creates a new ExampleSubsystem.
    */
   public Shooter() {
-    ShooterRate = 1;
+    ShooterRate = 1.0;
     EncoderStart = true;
     scheduler = CommandScheduler.getInstance();
     ShooterMotorOne = new CANSparkMax(Constants.SHOOTER_SPARK_ONE, MotorType.kBrushless);//maybe parameter needs to be changed
@@ -57,6 +57,11 @@ public class Shooter extends SubsystemBase {
 
   public void launch() {
     ShooterMotorOne.set(ShooterRate);
+    ShooterMotorTwo.set(-ShooterRate);
+  }
+
+  public void curve() {
+    ShooterMotorOne.set(ShooterRate*.2);
     ShooterMotorTwo.set(-ShooterRate);
   }
 

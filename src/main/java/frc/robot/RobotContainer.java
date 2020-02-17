@@ -71,7 +71,7 @@ public class RobotContainer {
           _drive_subsystem,
           () -> leftJoy.getY(Hand.kLeft),
           () -> leftJoy.getX(Hand.kLeft),
-          () -> rightJoy.getX(Hand.kRight),
+          () -> rightJoy.getX(Hand.kRight) * .1,
           leftJoy.getTrigger()   
         )
       );
@@ -90,18 +90,20 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(leftJoy, 7).whenPressed(() -> _drive_subsystem.resetGyroAngle(Rotation2.ZERO));
 
-    // new JoystickButton(xboxController, 1).whenPressed(() -> _intake_indexer_command.indexerForward());
-    // new JoystickButton(xboxController, 1).whenReleased(() -> _intake_indexer_command.indexerStop());
-    // new JoystickButton(xboxController, 2).whenPressed(() -> _intake_indexer_command.indexerReverse());
-    // new JoystickButton(xboxController, 2).whenReleased(() -> _intake_indexer_command.indexerStop());
+    new JoystickButton(xboxController, 1).whenPressed(() -> _intake_indexer_command.indexerForward());
+    new JoystickButton(xboxController, 1).whenReleased(() -> _intake_indexer_command.indexerStop());
+    new JoystickButton(xboxController, 2).whenPressed(() -> _intake_indexer_command.indexerReverse());
+    new JoystickButton(xboxController, 2).whenReleased(() -> _intake_indexer_command.indexerStop());
 
-    // new JoystickButton(xboxController, 3).whenPressed(() -> _intake_indexer_command.intakeForward());
-    // new JoystickButton(xboxController, 3).whenReleased(() -> _intake_indexer_command.intakeStop());
-    // new JoystickButton(xboxController, 4).whenPressed(() -> _intake_indexer_command.intakeReverse());
-    // new JoystickButton(xboxController, 4).whenReleased(() -> _intake_indexer_command.intakeStop());
+    new JoystickButton(xboxController, 3).whenPressed(() -> _intake_indexer_command.intakeForward());
+    new JoystickButton(xboxController, 3).whenReleased(() -> _intake_indexer_command.intakeStop());
+    new JoystickButton(xboxController, 4).whenPressed(() -> _intake_indexer_command.intakeReverse());
+    new JoystickButton(xboxController, 4).whenReleased(() -> _intake_indexer_command.intakeStop());
 
-    // new JoystickButton(xboxController, 6).whenPressed(() -> _shooter_command.fire());
-    // new JoystickButton(xboxController, 6).whenReleased(() -> _shooter_command.stop());
+    new JoystickButton(xboxController, 6).whenPressed(() -> _shooter_command.fire());
+    new JoystickButton(xboxController, 6).whenReleased(() -> _shooter_command.stop());
+    new JoystickButton(xboxController, 5).whenPressed(() -> _shooter_command.curve());
+    new JoystickButton(xboxController, 5).whenReleased(() -> _shooter_command.stop());
   }
 
   /**

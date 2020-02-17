@@ -45,8 +45,10 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DrivetrainSubsystem extends SubsystemBase implements UpdateManager.Updatable {
-    private static final double TRACKWIDTH = 24.0;
-    private static final double WHEELBASE = 20.0;
+    private static final double TRACKWIDTH = 23.5;
+    private static final double WHEELBASE = 22.0;
+    private static final double DRIVE_REDUCTION = 9.62 / 1.0;
+    private static final double WHEEL_DIAMETER = 4.0;
 
     private final SwerveModule frontLeftModule =
             new Mk2SwerveModuleBuilder(new Vector2(TRACKWIDTH / 2.0, -WHEELBASE / 2.0))
@@ -57,8 +59,9 @@ public class DrivetrainSubsystem extends SubsystemBase implements UpdateManager.
                             new CANSparkMax(DRIVE_FRONT_LEFT_STEER_MOTOR, MotorType.kBrushless),
                             Mk2SwerveModuleBuilder.MotorType.NEO)
                     .driveMotor(
-                            new CANSparkMax(DRIVE_FRONT_LEFT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
-                            Mk2SwerveModuleBuilder.MotorType.NEO)
+                            new CANSparkMax(DRIVE_FRONT_LEFT_DRIVE_MOTOR, MotorType.kBrushless),
+                            DRIVE_REDUCTION,
+                            WHEEL_DIAMETER)
                     .build();               
     private final SwerveModule frontRightModule =
             new Mk2SwerveModuleBuilder(new Vector2(TRACKWIDTH / 2.0, WHEELBASE / 2.0))
@@ -69,8 +72,9 @@ public class DrivetrainSubsystem extends SubsystemBase implements UpdateManager.
                             new CANSparkMax(DRIVE_FRONT_RIGHT_STEER_MOTOR, MotorType.kBrushless),
                             Mk2SwerveModuleBuilder.MotorType.NEO)
                     .driveMotor(
-                            new CANSparkMax(DRIVE_FRONT_RIGHT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
-                            Mk2SwerveModuleBuilder.MotorType.NEO)
+                            new CANSparkMax(DRIVE_FRONT_RIGHT_DRIVE_MOTOR, MotorType.kBrushless),
+                            DRIVE_REDUCTION,
+                            WHEEL_DIAMETER)
                     .build();
     private final SwerveModule backLeftModule =
             new Mk2SwerveModuleBuilder(new Vector2(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0))
@@ -81,8 +85,9 @@ public class DrivetrainSubsystem extends SubsystemBase implements UpdateManager.
                             new CANSparkMax(DRIVE_BACK_LEFT_STEER_MOTOR, MotorType.kBrushless),
                             Mk2SwerveModuleBuilder.MotorType.NEO)
                     .driveMotor(
-                            new CANSparkMax(DRIVE_BACK_LEFT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
-                            Mk2SwerveModuleBuilder.MotorType.NEO)
+                            new CANSparkMax(DRIVE_BACK_LEFT_DRIVE_MOTOR, MotorType.kBrushless),
+                            DRIVE_REDUCTION,
+                            WHEEL_DIAMETER)
                     .build();
     private final SwerveModule backRightModule =
             new Mk2SwerveModuleBuilder(new Vector2(-TRACKWIDTH / 2.0, WHEELBASE / 2.0))
@@ -93,8 +98,9 @@ public class DrivetrainSubsystem extends SubsystemBase implements UpdateManager.
                             new CANSparkMax(DRIVE_BACK_RIGHT_STEER_MOTOR, MotorType.kBrushless),
                             Mk2SwerveModuleBuilder.MotorType.NEO)
                     .driveMotor(
-                            new CANSparkMax(DRIVE_BACK_RIGHT_DRIVE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless),
-                            Mk2SwerveModuleBuilder.MotorType.NEO)
+                            new CANSparkMax(DRIVE_BACK_RIGHT_DRIVE_MOTOR, MotorType.kBrushless),
+                            DRIVE_REDUCTION,
+                            WHEEL_DIAMETER)
                     .build();
     private final SwerveModule[] modules = {frontLeftModule, frontRightModule, backLeftModule, backRightModule};
 
