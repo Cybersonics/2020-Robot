@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -55,6 +56,18 @@ public class Launcher extends SubsystemBase {
   public void launcherStop() {
     calculatedLaunch(0);
     calculatedLaunch(0);
+  }
+
+  public void calculatedPivot(double setPoint) {
+    _pivotMotor.set(ControlMode.Position, setPoint);
+  }
+
+  public void pivotMax() {
+    calculatedPivot(50);
+  }
+
+  public void pivotParalleToFloor() {
+    calculatedPivot(25);
   }
 
   // End Public Methods

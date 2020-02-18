@@ -27,7 +27,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void manualControl(double speed) {
-    _intakeMotor.set(ControlMode.PercentOutput, speed);
+    _intakeMotor.set(ControlMode.PercentOutput, speed * MAX_INTAKE_SPEED);
   }
 
   public void forward() {
