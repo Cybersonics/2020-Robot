@@ -69,15 +69,27 @@ public class Launcher extends SubsystemBase {
   }
 
   public void calculatedPivot(final double setPoint) {
-    _pivotMotor.set(ControlMode.Position, setPoint);
+    if (setPoint > 650) {
+      _pivotMotor.set(ControlMode.Position, setPoint);
+    } else if (setPoint < 1000) {
+      _pivotMotor.set(ControlMode.Position, setPoint);
+    }
   }
 
-  public void pivotMax() {
-    calculatedPivot(5);
+  public void autonAngle() {
+    calculatedPivot(810);
+  }
+
+  public void trenchAngle() {
+    calculatedPivot(800);
   }
 
   public void pivotParalleToFloor() {
-    calculatedPivot(0);
+    calculatedPivot(935);
+  }
+
+  public void bottomAngle() {
+    calculatedPivot(999);
   }
 
   // End Public Methods
@@ -101,7 +113,7 @@ public class Launcher extends SubsystemBase {
     _pivotMotor.configSelectedFeedbackSensor(FeedbackDevice.Analog, 0, 0);
     _pivotMotor.setInverted(false);
     _pivotMotor.setSensorPhase(false);
-    _pivotMotor.config_kP(0, 1.0, 0);
+    _pivotMotor.config_kP(0, 0.5, 0);
     _pivotMotor.config_kI(0, 0.02, 0);
     _pivotMotor.config_kD(0, 0, 0);
     _pivotMotor.config_IntegralZone(0, 100, 0);

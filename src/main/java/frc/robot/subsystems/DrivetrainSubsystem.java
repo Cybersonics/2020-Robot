@@ -51,6 +51,7 @@ public class DrivetrainSubsystem extends SubsystemBase implements UpdateManager.
     private static CANSparkMax LF_Drive = new CANSparkMax(DRIVE_FRONT_LEFT_DRIVE_MOTOR, MotorType.kBrushless);
     
     private static CANSparkMax RR_Drive = new CANSparkMax(DRIVE_BACK_RIGHT_DRIVE_MOTOR, MotorType.kBrushless);
+    private static CANSparkMax RF_Drive = new CANSparkMax(DRIVE_FRONT_RIGHT_DRIVE_MOTOR, MotorType.kBrushless);
     
     private final SwerveModule frontLeftModule =
     new Mk2SwerveModuleBuilder(new Vector2(TRACKWIDTH / 2.0, -WHEELBASE / 2.0))
@@ -74,7 +75,7 @@ public class DrivetrainSubsystem extends SubsystemBase implements UpdateManager.
                             new CANSparkMax(DRIVE_FRONT_RIGHT_STEER_MOTOR, MotorType.kBrushless),
                             Mk2SwerveModuleBuilder.MotorType.NEO)
                             .driveMotor(
-                                    new CANSparkMax(DRIVE_FRONT_RIGHT_DRIVE_MOTOR, MotorType.kBrushless),
+                                    RF_Drive,
                                     DRIVE_REDUCTION,
                             WHEEL_DIAMETER)
                             .build();
@@ -138,7 +139,8 @@ public class DrivetrainSubsystem extends SubsystemBase implements UpdateManager.
                     navX.setInverted(true);
                 }
                 LF_Drive.setInverted(true);
-            RR_Drive.setInverted(true);
+                RR_Drive.setInverted(true);
+                RF_Drive.setInverted(true);
 
                 ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
                 poseXEntry = tab.add("Pose X", 0.0)

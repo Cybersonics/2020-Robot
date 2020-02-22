@@ -52,13 +52,18 @@ public class LauncherCommand extends CommandBase {
   }
 
   
-  public void pivotUp() {
-    _launcher.pivotMax();
+  public void autonAngle() {
+    _launcher.autonAngle();
 }  
 
-public void pivotDown() {
-    _launcher.pivotParalleToFloor();
+public void trenchAngle() {
+    _launcher.trenchAngle();
 }
+
+public void bottomAngle() {
+  _launcher.bottomAngle();
+}
+
 
 public void calculatedPivot(double speed) {
   _launcher.calculatedPivot(speed);
