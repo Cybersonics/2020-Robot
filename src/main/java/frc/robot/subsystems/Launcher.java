@@ -62,12 +62,16 @@ public class Launcher extends SubsystemBase {
     _pivotMotor.set(ControlMode.Position, setPoint);
   }
 
-  public void pivotMax() {
-    calculatedPivot(50);
+  public void pivotAuton() {
+    calculatedPivot(Constants.AUTON_ANGLE_SETPOINT);
+  }
+
+  public void pivotTrench() {
+    calculatedPivot(Constants.TRENCH_ANGLE_SETPOINT);
   }
 
   public void pivotParalleToFloor() {
-    calculatedPivot(25);
+    calculatedPivot(Constants.MIN_ANGLE_SETPOINT);
   }
 
   // End Public Methods

@@ -177,7 +177,7 @@ public class DrivetrainSubsystem extends SubsystemBase implements UpdateManager.
 
     public void drive(Vector2 translationalVelocity, double rotationalVelocity, boolean fieldOriented) {
         synchronized (stateLock) {
-            driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, fieldOriented);
+            driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, true);
         }
     }
 

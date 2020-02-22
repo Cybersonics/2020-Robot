@@ -41,10 +41,10 @@ public final class Constants {
     public final static double HEXAGON_INNER_HOLE_BOTTOM_DIF = 8.5;
     public final static double HEXAGON_SIDE = 17.0;//leng of one side of the hexagon
     public final static double LAUNCHER_HEIGHT = 40.0; //height of launcher on robot
-    public final static double MAX_ANGLE = 33.0;//hieghest possible angle of shooter
-    public final static double MIN_ANGLE = -4.0;//hieghest possible angle of shooter
-    public final static double BEHIND_COLOR_WHEEL_ANGLE = 8.0; //angle of shooter when behind color wheel
-    public final static double AUTON_START_SHOOTER_ANGLE = 26.0; //26 deg. when 10ft awy from target
+    public final static double TRENCH_ANGLE_SETPOINT = 800;
+    public final static double AUTON_ANGLE_SETPOINT = 810;
+    public final static double MIN_ANGLE_SETPOINT = 935;
+    public final static double MIN_ANGLE = 999;
     
     public static final int DRIVE_FRONT_LEFT_STEER_ENCODER = 0;
     public static final int DRIVE_FRONT_LEFT_STEER_MOTOR = 20;
@@ -53,7 +53,7 @@ public final class Constants {
 
     public static final int DRIVE_FRONT_RIGHT_STEER_ENCODER = 3;
     public static final int DRIVE_FRONT_RIGHT_STEER_MOTOR = 23;
-    public static final double DRIVE_FRONT_RIGHT_STEER_OFFSET = Math.toRadians(95.0);
+    public static final double DRIVE_FRONT_RIGHT_STEER_OFFSET = -Math.toRadians(60.0);
     public static final int DRIVE_FRONT_RIGHT_DRIVE_MOTOR = 13;
 
     public static final int DRIVE_BACK_LEFT_STEER_ENCODER = 1;
@@ -63,7 +63,7 @@ public final class Constants {
 
     public static final int DRIVE_BACK_RIGHT_STEER_ENCODER = 2;
     public static final int DRIVE_BACK_RIGHT_STEER_MOTOR = 22;
-    public static final double DRIVE_BACK_RIGHT_STEER_OFFSET = Math.toRadians(127.0); //-53
+    public static final double DRIVE_BACK_RIGHT_STEER_OFFSET = Math.toRadians(127.0);
     public static final int DRIVE_BACK_RIGHT_DRIVE_MOTOR = 12;
     
 }

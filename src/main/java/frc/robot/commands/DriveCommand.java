@@ -44,6 +44,6 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        drivetrain.drive(Vector2.ZERO, 0.0, false);
+        // drivetrain.drive(Vector2.ZERO, 0.0, false);
     }
 }
