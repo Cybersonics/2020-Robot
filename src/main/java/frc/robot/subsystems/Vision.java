@@ -32,11 +32,11 @@ public class Vision extends SubsystemBase {
 
     }
 
-    public double getYaw(){
+    public double getX(){
         return _yaw.getDouble(0.0);
     }
 
-    public double getPitch(){
+    public double getY(){
         return _pitch.getDouble(0.0);
     }
 

@@ -48,102 +48,108 @@ public class DrivetrainSubsystem extends SubsystemBase implements UpdateManager.
     private static final double DRIVE_REDUCTION = 9.62 / 1.0;
     private static final double WHEEL_DIAMETER = 4.0;
 
+    private static CANSparkMax LF_Drive = new CANSparkMax(DRIVE_FRONT_LEFT_DRIVE_MOTOR, MotorType.kBrushless);
+    
+    private static CANSparkMax RR_Drive = new CANSparkMax(DRIVE_BACK_RIGHT_DRIVE_MOTOR, MotorType.kBrushless);
+    
     private final SwerveModule frontLeftModule =
-            new Mk2SwerveModuleBuilder(new Vector2(TRACKWIDTH / 2.0, -WHEELBASE / 2.0))
-                    .angleEncoder(
-                            new AnalogInput(DRIVE_FRONT_LEFT_STEER_ENCODER),
-                            DRIVE_FRONT_LEFT_STEER_OFFSET)
-                    .angleMotor(
-                            new CANSparkMax(DRIVE_FRONT_LEFT_STEER_MOTOR, MotorType.kBrushless),
-                            Mk2SwerveModuleBuilder.MotorType.NEO)
+    new Mk2SwerveModuleBuilder(new Vector2(TRACKWIDTH / 2.0, -WHEELBASE / 2.0))
+    .angleEncoder(
+            new AnalogInput(DRIVE_FRONT_LEFT_STEER_ENCODER),
+            DRIVE_FRONT_LEFT_STEER_OFFSET)
+            .angleMotor(
+                    new CANSparkMax(DRIVE_FRONT_LEFT_STEER_MOTOR, MotorType.kBrushless),
+                    Mk2SwerveModuleBuilder.MotorType.NEO)
                     .driveMotor(
-                            new CANSparkMax(DRIVE_FRONT_LEFT_DRIVE_MOTOR, MotorType.kBrushless),
+                            LF_Drive,
                             DRIVE_REDUCTION,
                             WHEEL_DIAMETER)
-                    .build();               
-    private final SwerveModule frontRightModule =
+                            .build();               
+                            private final SwerveModule frontRightModule =
             new Mk2SwerveModuleBuilder(new Vector2(TRACKWIDTH / 2.0, WHEELBASE / 2.0))
-                    .angleEncoder(
-                            new AnalogInput(DRIVE_FRONT_RIGHT_STEER_ENCODER),
-                            DRIVE_FRONT_RIGHT_STEER_OFFSET)
+            .angleEncoder(
+                    new AnalogInput(DRIVE_FRONT_RIGHT_STEER_ENCODER),
+                    DRIVE_FRONT_RIGHT_STEER_OFFSET)
                     .angleMotor(
                             new CANSparkMax(DRIVE_FRONT_RIGHT_STEER_MOTOR, MotorType.kBrushless),
                             Mk2SwerveModuleBuilder.MotorType.NEO)
-                    .driveMotor(
-                            new CANSparkMax(DRIVE_FRONT_RIGHT_DRIVE_MOTOR, MotorType.kBrushless),
-                            DRIVE_REDUCTION,
+                            .driveMotor(
+                                    new CANSparkMax(DRIVE_FRONT_RIGHT_DRIVE_MOTOR, MotorType.kBrushless),
+                                    DRIVE_REDUCTION,
                             WHEEL_DIAMETER)
-                    .build();
+                            .build();
     private final SwerveModule backLeftModule =
-            new Mk2SwerveModuleBuilder(new Vector2(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0))
-                    .angleEncoder(
-                            new AnalogInput(DRIVE_BACK_LEFT_STEER_ENCODER),
-                            DRIVE_BACK_LEFT_STEER_OFFSET)
-                    .angleMotor(
-                            new CANSparkMax(DRIVE_BACK_LEFT_STEER_MOTOR, MotorType.kBrushless),
-                            Mk2SwerveModuleBuilder.MotorType.NEO)
+    new Mk2SwerveModuleBuilder(new Vector2(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0))
+    .angleEncoder(
+            new AnalogInput(DRIVE_BACK_LEFT_STEER_ENCODER),
+            DRIVE_BACK_LEFT_STEER_OFFSET)
+            .angleMotor(
+                    new CANSparkMax(DRIVE_BACK_LEFT_STEER_MOTOR, MotorType.kBrushless),
+                    Mk2SwerveModuleBuilder.MotorType.NEO)
                     .driveMotor(
                             new CANSparkMax(DRIVE_BACK_LEFT_DRIVE_MOTOR, MotorType.kBrushless),
                             DRIVE_REDUCTION,
                             WHEEL_DIAMETER)
-                    .build();
-    private final SwerveModule backRightModule =
-            new Mk2SwerveModuleBuilder(new Vector2(-TRACKWIDTH / 2.0, WHEELBASE / 2.0))
-                    .angleEncoder(
-                            new AnalogInput(DRIVE_BACK_RIGHT_STEER_ENCODER),
-                            DRIVE_BACK_RIGHT_STEER_OFFSET)
-                    .angleMotor(
-                            new CANSparkMax(DRIVE_BACK_RIGHT_STEER_MOTOR, MotorType.kBrushless),
-                            Mk2SwerveModuleBuilder.MotorType.NEO)
-                    .driveMotor(
-                            new CANSparkMax(DRIVE_BACK_RIGHT_DRIVE_MOTOR, MotorType.kBrushless),
-                            DRIVE_REDUCTION,
-                            WHEEL_DIAMETER)
-                    .build();
-    private final SwerveModule[] modules = {frontLeftModule, frontRightModule, backLeftModule, backRightModule};
-
-    private final SwerveKinematics kinematics = new SwerveKinematics(
-            new Vector2(TRACKWIDTH / 2.0, WHEELBASE / 2.0), // Front Left
-            new Vector2(TRACKWIDTH / 2.0, -WHEELBASE / 2.0), // Front Right
-            new Vector2(-TRACKWIDTH / 2.0, WHEELBASE / 2.0), // Back Left
-            new Vector2(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0) // Back Right
-    );
-    private final SwerveOdometry odometry = new SwerveOdometry(kinematics, RigidTransform2.ZERO);
-
-    private final Object sensorLock = new Object();
-    @GuardedBy("sensorLock")
-    private final NavX navX = new NavX(SPI.Port.kMXP);
-
-    private final Object kinematicsLock = new Object();    
-    @GuardedBy("kinematicsLock")
+                            .build();
+                            private final SwerveModule backRightModule =
+                            new Mk2SwerveModuleBuilder(new Vector2(-TRACKWIDTH / 2.0, WHEELBASE / 2.0))
+                            .angleEncoder(
+                                    new AnalogInput(DRIVE_BACK_RIGHT_STEER_ENCODER),
+                                    DRIVE_BACK_RIGHT_STEER_OFFSET)
+                                    .angleMotor(
+                                            new CANSparkMax(DRIVE_BACK_RIGHT_STEER_MOTOR, MotorType.kBrushless),
+                                            Mk2SwerveModuleBuilder.MotorType.NEO)
+                                            .driveMotor(
+                                                    RR_Drive,
+                                                    DRIVE_REDUCTION,
+                                                    WHEEL_DIAMETER)
+                                                    .build();
+                                                    private final SwerveModule[] modules = {frontLeftModule, frontRightModule, backLeftModule, backRightModule};
+                                                    
+                                                    private final SwerveKinematics kinematics = new SwerveKinematics(
+                                                            new Vector2(TRACKWIDTH / 2.0, WHEELBASE / 2.0), // Front Left
+                                                            new Vector2(TRACKWIDTH / 2.0, -WHEELBASE / 2.0), // Front Right
+                                                            new Vector2(-TRACKWIDTH / 2.0, WHEELBASE / 2.0), // Back Left
+                                                            new Vector2(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0) // Back Right
+                                                            );
+                                                            private final SwerveOdometry odometry = new SwerveOdometry(kinematics, RigidTransform2.ZERO);
+                                                            
+                                                            private final Object sensorLock = new Object();
+                                                            @GuardedBy("sensorLock")
+                                                            private final NavX navX = new NavX(SPI.Port.kMXP);
+                                                            
+                                                            private final Object kinematicsLock = new Object();    
+                                                            @GuardedBy("kinematicsLock")
     private RigidTransform2 pose = RigidTransform2.ZERO;
-
+    
     private final Object stateLock = new Object();
     @GuardedBy("stateLock")
     private HolonomicDriveSignal driveSignal = null;
-
+    
     // Logging stuff
     private NetworkTableEntry poseXEntry;
     private NetworkTableEntry poseYEntry;
     private NetworkTableEntry poseAngleEntry;
-
+    
     private NetworkTableEntry[] moduleAngleEntries = new NetworkTableEntry[modules.length];
-
+    
     public DrivetrainSubsystem() {
-        synchronized (sensorLock) {
-            navX.setInverted(true);
-        }
+            synchronized (sensorLock) {
+                    navX.setInverted(true);
+                }
+                LF_Drive.setInverted(true);
+            RR_Drive.setInverted(true);
 
-        ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
-        poseXEntry = tab.add("Pose X", 0.0)
+                ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
+                poseXEntry = tab.add("Pose X", 0.0)
                 .withPosition(0, 0)
                 .withSize(1, 1)
                 .getEntry();
-        poseYEntry = tab.add("Pose Y", 0.0)
+                poseYEntry = tab.add("Pose Y", 0.0)
                 .withPosition(0, 1)
                 .withSize(1, 1)
                 .getEntry();
-        poseAngleEntry = tab.add("Pose Angle", 0.0)
+                poseAngleEntry = tab.add("Pose Angle", 0.0)
                 .withPosition(0, 2)
                 .withSize(1, 1)
                 .getEntry();
@@ -177,7 +183,7 @@ public class DrivetrainSubsystem extends SubsystemBase implements UpdateManager.
 
     public void drive(Vector2 translationalVelocity, double rotationalVelocity, boolean fieldOriented) {
         synchronized (stateLock) {
-            driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, fieldOriented);
+            driveSignal = new HolonomicDriveSignal(translationalVelocity, rotationalVelocity, true);
         }
     }
 

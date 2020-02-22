@@ -45,7 +45,7 @@ public class Drive extends SubsystemBase {
 	private static PIDController steerRightFrontPID;
 	private static PIDController steerRightRearPID;
 
-	public static final double WHEEL_BASE_LENGTH = 20; // 28.0;
+	public static final double WHEEL_BASE_LENGTH = 21.5111; // 28.0;
 	public static final double WHEEL_BASE_WIDTH = 24; // 22.0;
 	public static final double ENCODER_COUNT_PER_ROTATION = 4096.0;
 
@@ -251,7 +251,7 @@ public class Drive extends SubsystemBase {
 		// Set each swerve module, scaling the drive speeds by the maximum speed
 		setSwerveModule("LF", inputLeftFront, steerLeftFrontPID, driveLeftFront, steerLeftFront, angleLF, speedLF / maxSpeed);
 		setSwerveModule("LR", inputLeftRear, steerLeftRearPID, driveLeftRear, steerLeftRear, angleLR, speedLR / maxSpeed);
-		// setSwerveModule(inputRightFront, steerRightFrontPID, driveRightFront, steerRightFront, angleRF, speedRF / maxSpeed);
+		setSwerveModule("RF", inputRightFront, steerRightFrontPID, driveRightFront, steerRightFront, angleRF, speedRF / maxSpeed);
 		setSwerveModule("RR", inputRightRear, steerRightRearPID ,driveRightRear, steerRightRear, angleRR, speedRR / maxSpeed);
 	}
 

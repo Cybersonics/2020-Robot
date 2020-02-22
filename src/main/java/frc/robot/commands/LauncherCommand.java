@@ -51,5 +51,18 @@ public class LauncherCommand extends CommandBase {
     _launcher.calculatedLaunch(speed);
   }
 
+  
+  public void pivotUp() {
+    _launcher.pivotMax();
+}  
+
+public void pivotDown() {
+    _launcher.pivotParalleToFloor();
+}
+
+public void calculatedPivot(double speed) {
+  _launcher.calculatedPivot(speed);
+}
+
   // End Public Methods
 }

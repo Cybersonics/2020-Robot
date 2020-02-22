@@ -15,6 +15,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -26,7 +29,8 @@ public class Launcher extends SubsystemBase {
   private final double MAX_SHOOTER_RATE = 1.0;
   private CANSparkMax _rightMotor;
   private CANSparkMax _leftMotor;
-  private TalonSRX _pivotMotor;
+  private NetworkTableEntry pivotAngle;
+  private static TalonSRX _pivotMotor;
 
   // End Member Variables
 
@@ -37,13 +41,19 @@ public class Launcher extends SubsystemBase {
     setupRightMotor();
     setupLeftMotor();
     setupPivotMotor();
+
+    ShuffleboardTab tab = Shuffleboard.getTab("Turret");
+        pivotAngle = tab.add("Pivot Angle", 0.0)
+                .withPosition(0, 0)
+                .withSize(1, 1)
+                .getEntry();
   }
 
   // End Constructors
 
   // Public Methods
 
-  public void calculatedLaunch(double speed) {
+  public void calculatedLaunch(final double speed) {
     _rightMotor.set(speed);
     _leftMotor.set(speed);
   }
@@ -58,16 +68,16 @@ public class Launcher extends SubsystemBase {
     calculatedLaunch(0);
   }
 
-  public void calculatedPivot(double setPoint) {
+  public void calculatedPivot(final double setPoint) {
     _pivotMotor.set(ControlMode.Position, setPoint);
   }
 
   public void pivotMax() {
-    calculatedPivot(50);
+    calculatedPivot(5);
   }
 
   public void pivotParalleToFloor() {
-    calculatedPivot(25);
+    calculatedPivot(0);
   }
 
   // End Public Methods
@@ -98,7 +108,18 @@ public class Launcher extends SubsystemBase {
     _pivotMotor.configAllowableClosedloopError(0, 5, 0);
     _pivotMotor.setNeutralMode(NeutralMode.Brake);
     _pivotMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 5, 0);
+
+    
   }
 
   // End Private Methods
+
+  public static int getPivotAngle() {
+    return _pivotMotor.getSelectedSensorPosition();
+  }
+
+  @Override
+    public void periodic() {
+      pivotAngle.setDouble(getPivotAngle());
+    }
 }
