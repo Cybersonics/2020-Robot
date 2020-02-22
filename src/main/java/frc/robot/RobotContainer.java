@@ -89,7 +89,7 @@ public class RobotContainer {
         _drive,
         () -> deadzoneLeftController(leftJoy.getY(Hand.kLeft)),
         () -> deadzoneLeftController(leftJoy.getX(Hand.kLeft)),
-        () -> deadzoneRightController(rightJoy.getX(Hand.kRight)) * .1,
+        () -> deadzoneRightController(rightJoy.getX(Hand.kRight)),
         () -> leftJoy.getTrigger()   
       )
     );
@@ -146,6 +146,13 @@ public class RobotContainer {
 
     new JoystickButton(xboxController, 6).whenPressed(() -> _launcherCommand.fire());
     new JoystickButton(xboxController, 6).whenReleased(() -> _launcherCommand.stop());
+
+    // new JoystickButton(xboxController, 4).whenPressed(() -> _launcherCommand.autonAngle());
+    // new JoystickButton(xboxController, 4).whenPressed(() -> _launcherCommand.autonAngle());
+    // new JoystickButton(xboxController, 2).whenPressed(() -> _launcherCommand.trenchAngle());
+    // new JoystickButton(xboxController, 2).whenPressed(() -> _launcherCommand.trenchAngle());
+    // new JoystickButton(xboxController, 1).whenPressed(() -> _launcherCommand.bottomAngle());
+    // new JoystickButton(xboxController, 1).whenPressed(() -> _launcherCommand.bottomAngle());
   }
   
   // #endregion End Private Methods

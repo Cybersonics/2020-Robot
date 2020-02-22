@@ -15,6 +15,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -26,7 +29,8 @@ public class Launcher extends SubsystemBase {
   private final double MAX_SHOOTER_RATE = 1.0;
   private CANSparkMax _rightMotor;
   private CANSparkMax _leftMotor;
-  private TalonSRX _pivotMotor;
+  private NetworkTableEntry pivotAngle;
+  private static TalonSRX _pivotMotor;
 
   // End Member Variables
 
@@ -37,6 +41,12 @@ public class Launcher extends SubsystemBase {
     setupRightMotor();
     setupLeftMotor();
     setupPivotMotor();
+
+    ShuffleboardTab tab = Shuffleboard.getTab("Turret");
+        pivotAngle = tab.add("Pivot Angle", 0.0)
+                .withPosition(0, 0)
+                .withSize(1, 1)
+                .getEntry();
   }
 
   // End Constructors
@@ -58,20 +68,28 @@ public class Launcher extends SubsystemBase {
     calculatedLaunch(0);
   }
 
-  public void calculatedPivot(double setPoint) {
-    _pivotMotor.set(ControlMode.Position, setPoint);
+  public void calculatedPivot(final double setPoint) {
+    if (setPoint > 650) {
+      _pivotMotor.set(ControlMode.Position, setPoint);
+    } else if (setPoint < 1000) {
+      _pivotMotor.set(ControlMode.Position, setPoint);
+    }
   }
 
-  public void pivotAuton() {
-    calculatedPivot(Constants.AUTON_ANGLE_SETPOINT);
+  public void autonAngle() {
+    calculatedPivot(810);
   }
 
-  public void pivotTrench() {
-    calculatedPivot(Constants.TRENCH_ANGLE_SETPOINT);
+  public void trenchAngle() {
+    calculatedPivot(800);
   }
 
   public void pivotParalleToFloor() {
-    calculatedPivot(Constants.MIN_ANGLE_SETPOINT);
+    calculatedPivot(935);
+  }
+
+  public void bottomAngle() {
+    calculatedPivot(999);
   }
 
   // End Public Methods
@@ -95,14 +113,25 @@ public class Launcher extends SubsystemBase {
     _pivotMotor.configSelectedFeedbackSensor(FeedbackDevice.Analog, 0, 0);
     _pivotMotor.setInverted(false);
     _pivotMotor.setSensorPhase(false);
-    _pivotMotor.config_kP(0, 1.0, 0);
+    _pivotMotor.config_kP(0, 0.5, 0);
     _pivotMotor.config_kI(0, 0.02, 0);
     _pivotMotor.config_kD(0, 0, 0);
     _pivotMotor.config_IntegralZone(0, 100, 0);
     _pivotMotor.configAllowableClosedloopError(0, 5, 0);
     _pivotMotor.setNeutralMode(NeutralMode.Brake);
     _pivotMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 5, 0);
+
+    
   }
 
   // End Private Methods
+
+  public static int getPivotAngle() {
+    return _pivotMotor.getSelectedSensorPosition();
+  }
+
+  @Override
+    public void periodic() {
+      pivotAngle.setDouble(getPivotAngle());
+    }
 }

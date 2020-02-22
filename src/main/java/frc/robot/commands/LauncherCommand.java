@@ -51,5 +51,23 @@ public class LauncherCommand extends CommandBase {
     _launcher.calculatedLaunch(speed);
   }
 
+  
+  public void autonAngle() {
+    _launcher.autonAngle();
+}  
+
+public void trenchAngle() {
+    _launcher.trenchAngle();
+}
+
+public void bottomAngle() {
+  _launcher.bottomAngle();
+}
+
+
+public void calculatedPivot(double speed) {
+  _launcher.calculatedPivot(speed);
+}
+
   // End Public Methods
 }

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.AutoCommand;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Launcher;
 
 
 
@@ -127,6 +128,10 @@ public class Robot extends TimedRobot {
   }
 
   public void updateDashBoard() {
+    // int pivotAngle = Launcher.getPivotAngle();
+		// SmartDashboard.putNumber(("pivotAngle: "), pivotAngle);
+
+
     // double[] encoders = Drive.getEncoderValues();
 		// SmartDashboard.putNumber(("LeftFront AnalogInput position: "), encoders[0]);
 		// SmartDashboard.putNumber(("LeftRear AnalogInput position: "), encoders[1]);
