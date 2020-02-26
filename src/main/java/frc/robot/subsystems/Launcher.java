@@ -59,8 +59,8 @@ public class Launcher extends SubsystemBase {
   }
 
   public void launcherStart() {
-    calculatedLaunch(MAX_SHOOTER_RATE);
-    calculatedLaunch(MAX_SHOOTER_RATE);
+    calculatedLaunch(MAX_SHOOTER_RATE*1.0);
+    calculatedLaunch(MAX_SHOOTER_RATE*1.0);
   }
 
   public void launcherStop() {

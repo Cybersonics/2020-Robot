@@ -12,6 +12,8 @@ import java.util.function.DoubleSupplier;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.UpdateManager;
 
+import frc.robot.subsystems.Climber;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
@@ -19,6 +21,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutoCommand;
+import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
@@ -53,6 +56,8 @@ public class RobotContainer {
   private final IntakeCommand _intakeCommand = new IntakeCommand(_intake);
   private final IndexerCommand _indexerCommand = new IndexerCommand(_indexer);
   private final LauncherCommand _launcherCommand = new LauncherCommand(_launcher, _vision);
+  private final ClimberCommand extend = new ClimberCommand();
+
 
   private final AutoCommand m_autoCommand = new AutoCommand();
 
@@ -143,6 +148,11 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(leftJoy, 7).whenPressed(() -> _drive.resetGyroAngle(Rotation2.ZERO));
+    new JoystickButton(leftJoy, 8).whenPressed(() -> extend.extend());
+    new JoystickButton(leftJoy, 8).whenReleased(() -> extend.stop());
+    new JoystickButton(leftJoy, 9).whenPressed(() -> extend.retract());
+    new JoystickButton(leftJoy, 9).whenReleased(() -> extend.stop());
+
 
     new JoystickButton(xboxController, 6).whenPressed(() -> _launcherCommand.fire());
     new JoystickButton(xboxController, 6).whenReleased(() -> _launcherCommand.stop());
