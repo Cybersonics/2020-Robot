@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Shooter extends SubsystemBase {
+public class Launcher extends SubsystemBase {
 
   public double ShooterRate;
   public double PivotRate = 0.5;
@@ -26,8 +26,6 @@ public class Shooter extends SubsystemBase {
   public static CANSparkMax ShooterMotorTwo;
   public static TalonSRX PivotMotor;
   public static AnalogEncoder Encoder;
-  private static AnalogInput EncoderInput;
-  private static boolean EncoderStart;
 
   public double CurrentAngle;
   public double IncreaseOfAngle;
@@ -38,9 +36,8 @@ public class Shooter extends SubsystemBase {
   /**
    * Creates a new ExampleSubsystem.
    */
-  public Shooter() {
-    ShooterRate = 1;
-    EncoderStart = true;
+  public Launcher() {
+    ShooterRate = 1.0;
     scheduler = CommandScheduler.getInstance();
     ShooterMotorOne = new CANSparkMax(Constants.SHOOTER_SPARK_ONE, MotorType.kBrushless);//maybe parameter needs to be changed
     ShooterMotorOne.restoreFactoryDefaults();
@@ -48,10 +45,6 @@ public class Shooter extends SubsystemBase {
     ShooterMotorTwo.restoreFactoryDefaults();
     PivotMotor = new TalonSRX(Constants.PIVOT_TALON);
     PivotMotor.configFactoryDefault();
-    // EncoderInput = new AnalogInput(Constants.SHOOTER_ENCODER);//needs to be changed
-    // Encoder = new AnalogEncoder(EncoderInput);
-    // Encoder.setDistancePerRotation(Constants.SHOOTER_ENCODER_ANGLE_INCREASE);//set the distance to the increase in angle per rotation
-    // Encoder.reset();
     scheduler.registerSubsystem(this);
   }
 

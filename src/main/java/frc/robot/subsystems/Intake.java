@@ -12,43 +12,33 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-  public final int INTERVAL_OF_STOPS = 100;
-  public double UntilStop;
-  public VictorSPX intakeMotor;
+  public VictorSPX _intakeMotor;
+  public final double MAX_INTAKE_SPEED = .50;
 
-  private CommandScheduler scheduler;
-
-
-  /**
-   * Creates a new ExampleSubsystem.
-   */
   public Intake () {
-
-    scheduler = CommandScheduler.getInstance();
-    scheduler.registerSubsystem(this);
+    CommandScheduler.getInstance().registerSubsystem(this);
     
-    intakeMotor = new VictorSPX(Constants.INTAKE_VICTOR);
-    intakeMotor.configFactoryDefault();
+    _intakeMotor = new VictorSPX(Constants.INTAKE_VICTOR);
+    _intakeMotor.configFactoryDefault();
   }
 
-  public void intakeRun() {
-    intakeMotor.set(ControlMode.PercentOutput, .50);
+  public void manualControl(double speed) {
+    _intakeMotor.set(ControlMode.PercentOutput, speed * MAX_INTAKE_SPEED);
   }
 
-  public void intakeReverse() {
-    intakeMotor.set(ControlMode.PercentOutput, -.50);
+  public void forward() {
+    this.manualControl(MAX_INTAKE_SPEED);
   }
 
-  public void intakeStop() {
-    intakeMotor.set(ControlMode.PercentOutput, 0);
+  public void reverse() {
+    this.manualControl(-MAX_INTAKE_SPEED);
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public void stop() {
+    this.manualControl(0);
   }
 }
-
