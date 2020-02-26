@@ -45,7 +45,7 @@ public class Rotate extends CommandBase {
     launcher.launch();
     ChassisSpeeds vector = new ChassisSpeeds(0, 0, Math.toRadians(degrees) / (duration / 1000));
     swerve.drive(vector);
-    System.out.println("[Rotate] TargetAngle: " + targetAngle + " Current Angle: " + gyro.getContinuousAngle());
+    System.out.println("[Rotate] TargetAngle: " + targetAngle + " Current Angle: " + (gyro.getContinuousAngle()*-1));
   }
 
   // Called once the command ends or is interrupted.
@@ -57,6 +57,6 @@ public class Rotate extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return targetAngle < gyro.getContinuousAngle();
+    return Math.abs(targetAngle - gyro.getContinuousAngle()*-1) < 5 || targetAngle < (gyro.getContinuousAngle()*-1);
   }
 }
