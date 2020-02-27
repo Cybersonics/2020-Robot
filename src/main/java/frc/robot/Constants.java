@@ -26,6 +26,7 @@ public final class Constants {
     public final static int SHOOTER_SPARK_ONE = 1;
     public final static int SHOOTER_SPARK_TWO = 2;
     public final static int PIVOT_TALON = 3;
+    public final static int CLIMBER = 6;
     public final static double MAX_DART_VALUE = 0.0; //needs to be updated
     public final static double MIN_DART_VALUE = 0.0; //needs to be updated
     public final static int SHOOTER_ENCODER = 0;//needs to be changed
@@ -48,12 +49,12 @@ public final class Constants {
     
     public static final int DRIVE_FRONT_LEFT_STEER_ENCODER = 0;
     public static final int DRIVE_FRONT_LEFT_STEER_MOTOR = 20;
-    public static final double DRIVE_FRONT_LEFT_STEER_OFFSET = 125.0;
+    public static final double DRIVE_FRONT_LEFT_STEER_OFFSET = 95.0;
     public static final int DRIVE_FRONT_LEFT_DRIVE_MOTOR = 10;
 
     public static final int DRIVE_FRONT_RIGHT_STEER_ENCODER = 3;
     public static final int DRIVE_FRONT_RIGHT_STEER_MOTOR = 23;
-    public static final double DRIVE_FRONT_RIGHT_STEER_OFFSET = 199.0;
+    public static final double DRIVE_FRONT_RIGHT_STEER_OFFSET = 16.0;
     public static final int DRIVE_FRONT_RIGHT_DRIVE_MOTOR = 13;
 
     public static final int DRIVE_BACK_LEFT_STEER_ENCODER = 1;
@@ -63,7 +64,7 @@ public final class Constants {
 
     public static final int DRIVE_BACK_RIGHT_STEER_ENCODER = 2;
     public static final int DRIVE_BACK_RIGHT_STEER_MOTOR = 22;
-    public static final double DRIVE_BACK_RIGHT_STEER_OFFSET = 72;
+    public static final double DRIVE_BACK_RIGHT_STEER_OFFSET = -108;
     public static final int DRIVE_BACK_RIGHT_DRIVE_MOTOR = 12;
     
 }

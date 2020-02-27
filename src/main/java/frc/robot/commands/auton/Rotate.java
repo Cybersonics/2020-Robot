@@ -21,14 +21,16 @@ public class Rotate extends CommandBase {
   private long duration;
   private double targetAngle;
   private NavXGyro gyro;
+  private boolean activeShooter;
   /**
    * Creates a new Rotate.
    */
-  public Rotate(SwerveDrive swerve, NavXGyro gyro, double degrees, long duration, Launcher launcher) {
+  public Rotate(SwerveDrive swerve, NavXGyro gyro, double degrees, long duration, Launcher launcher, boolean activateShooter) {
     this.swerve = swerve;
     this.degrees = degrees;
     this.duration = duration;
     this.launcher = launcher;
+    this.activeShooter = activateShooter;
     this.gyro = gyro;
     addRequirements(swerve);
   }
@@ -36,16 +38,18 @@ public class Rotate extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    targetAngle = gyro.getContinuousAngle() + degrees;
+    targetAngle = (gyro.getContinuousAngle()*-1) + degrees;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    launcher.launch();
+    if (activeShooter) {
+      launcher.start();
+    }
     ChassisSpeeds vector = new ChassisSpeeds(0, 0, Math.toRadians(degrees) / (duration / 1000));
     swerve.drive(vector);
-    System.out.println("[Rotate] TargetAngle: " + targetAngle + " Current Angle: " + (gyro.getContinuousAngle()*-1));
+    System.out.println("[Rotate] TargetAngle: " + targetAngle + " Current Angle: " + (gyro.getContinuousAngle()*-1) + " Shooter Active: " + activeShooter);
   }
 
   // Called once the command ends or is interrupted.
@@ -57,6 +61,6 @@ public class Rotate extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(targetAngle - gyro.getContinuousAngle()*-1) < 5 || targetAngle < (gyro.getContinuousAngle()*-1);
+    return Math.abs(targetAngle - gyro.getContinuousAngle()*-1) < 7 || targetAngle < (gyro.getContinuousAngle()*-1);
   }
 }

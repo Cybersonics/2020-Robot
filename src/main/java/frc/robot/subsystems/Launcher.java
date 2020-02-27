@@ -8,114 +8,115 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.AnalogEncoder;
-import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Launcher extends SubsystemBase {
 
-  public double ShooterRate;
+  private final double MAX_SHOOTER_RATE = 1.0;
   public double PivotRate = 0.5;
-  public static CANSparkMax ShooterMotorOne;
-  public static CANSparkMax ShooterMotorTwo;
-  public static TalonSRX PivotMotor;
-  public static AnalogEncoder Encoder;
+  public CANSparkMax _leftMotor;
+  public CANSparkMax _rightMotor;
+  public static TalonSRX _pivotMotor;
 
   public double CurrentAngle;
   public double IncreaseOfAngle;
-
-  private CommandScheduler scheduler;
+  
+  private NetworkTableEntry pivotAngle;
 
 
   /**
    * Creates a new ExampleSubsystem.
    */
   public Launcher() {
-    ShooterRate = 1.0;
-    scheduler = CommandScheduler.getInstance();
-    ShooterMotorOne = new CANSparkMax(Constants.SHOOTER_SPARK_ONE, MotorType.kBrushless);//maybe parameter needs to be changed
-    ShooterMotorOne.restoreFactoryDefaults();
-    ShooterMotorTwo = new CANSparkMax(Constants.SHOOTER_SPARK_TWO, MotorType.kBrushless);//maybe parameter needs to be changed
-    ShooterMotorTwo.restoreFactoryDefaults();
-    PivotMotor = new TalonSRX(Constants.PIVOT_TALON);
-    PivotMotor.configFactoryDefault();
-    scheduler.registerSubsystem(this);
+    CommandScheduler.getInstance().registerSubsystem(this);
+    setupRightMotor();
+    setupLeftMotor();
+    setupPivotMotor();
+    
+    ShuffleboardTab tab = Shuffleboard.getTab("Turret");
+        pivotAngle = tab.add("Pivot Angle", 0.0)
+                .withPosition(0, 0)
+                .withSize(1, 1)
+                .getEntry();
+  }  
+  
+  // Public Methods
+
+  public void calculatedLaunch(double speed) {
+    _rightMotor.set(speed);
+    _leftMotor.set(speed);
   }
 
-  public void launch() {
-    ShooterMotorOne.set(ShooterRate);
-    ShooterMotorTwo.set(-ShooterRate);
+  public void start() {
+    calculatedLaunch(MAX_SHOOTER_RATE);
+    calculatedLaunch(MAX_SHOOTER_RATE);
   }
 
   public void stop() {
-    ShooterMotorOne.set(0);
-    ShooterMotorTwo.set(0);
+    calculatedLaunch(0);
+    calculatedLaunch(0);
   }
 
-  public void SetShooterRate(double EnteredRate) {
-    ShooterRate = EnteredRate;
+  public void calculatedPivot(final double setPoint) {
+    if (setPoint > 650) {
+      _pivotMotor.set(ControlMode.Position, setPoint);
+    } else if (setPoint < 1000) {
+      _pivotMotor.set(ControlMode.Position, setPoint);
+    }
   }
 
-  public void PivotUp() {
-    // if (Encoder.getDistance() < Constants.MAX_ANGLE)// needs to be updated
-    //   PivotMotor.set(ControlMode.PercentOutput, PivotRate);
-    // CurrentAngle += IncreaseOfAngle;
+  public void stopPivot() {
+    _pivotMotor.set(ControlMode.PercentOutput, 0.0);
   }
 
-  public void PivotDown() {
-    // if (Encoder.getDistance() > Constants.MIN_ANGLE)// needs to be updated
-    //   PivotMotor.set(ControlMode.PercentOutput, -PivotRate);
-    // CurrentAngle -= IncreaseOfAngle;
+  // End Public Methods
+
+  private void setupRightMotor() {
+    _rightMotor = new CANSparkMax(Constants.SHOOTER_SPARK_ONE, MotorType.kBrushless);
+    _rightMotor.restoreFactoryDefaults();
   }
 
-  public void PivotShutDown() {
-    // PivotMotor.set(ControlMode.PercentOutput, 0);
+  private void setupLeftMotor() {
+    _leftMotor = new CANSparkMax(Constants.SHOOTER_SPARK_TWO, MotorType.kBrushless);
+    _leftMotor.restoreFactoryDefaults();
+    _leftMotor.setInverted(true);
   }
 
-  public void SetAngle(double NewAngle){
-//     //moves motor down till hits angle
-//     while(Encoder.getDistance()>NewAngle){ //might need to add an acceptable range condition so the the motor doesn't fluctuate if the value is not exact
-//       PivotDown();
-//     }
-//     //stops motor
-//     PivotShutDown();
-//     //moves motor up till hit angle
-//     while(Encoder.getDistance()<NewAngle){ //might need to add an acceptable range condition so the the motor doesn't fluctuate if the value is not exact
-//       PivotUp();
-//     }
-//     CurrentAngle = NewAngle;
-//   }
-
-//   public void ZeroAngle(){
-//     if (EncoderStart){
-//       PivotDown();
-//       Encoder.reset();
-//       SetAngle(3.0);
-//       Encoder.reset();
-//     }
-//     else{
-//       SetAngle(0.0);
-//       Encoder.reset();
-//     }
-//     CurrentAngle = 0.0;
-//     EncoderStart = false;
+  private void setupPivotMotor() {
+    _pivotMotor = new TalonSRX(Constants.PIVOT_TALON);
+    _pivotMotor.configFactoryDefault();
+    _pivotMotor.configSelectedFeedbackSensor(FeedbackDevice.Analog, 0, 0);
+    _pivotMotor.setInverted(false);
+    _pivotMotor.setSensorPhase(true);
+    _pivotMotor.config_kP(0, 5, 0);
+    _pivotMotor.config_kI(0, 0.04, 0);
+    _pivotMotor.config_kD(0, 0, 0);
+    _pivotMotor.config_IntegralZone(0, 100, 0);
+    _pivotMotor.configAllowableClosedloopError(0, 5, 0);
+    _pivotMotor.setNeutralMode(NeutralMode.Brake);
+    _pivotMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 5, 0);
   }
 
-  //Set the angle as minimum
-  public void AngleIsMinimum() {
-
-    // CurrentAngle = Constants.MIN_ANGLE;
+  public static int getPivotAngle() {
+    return _pivotMotor.getSelectedSensorPosition();
   }
 
   @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+    public void periodic() {
+      pivotAngle.setDouble(getPivotAngle());
+    }
 }
 

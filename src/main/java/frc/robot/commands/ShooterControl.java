@@ -37,7 +37,7 @@ public class ShooterControl extends CommandBase {
   }
 
   public void fire() {
-      _shooter.launch();
+      _shooter.start();
   }
 
   public void stop() {

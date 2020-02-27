@@ -31,6 +31,7 @@ import net.bancino.robotics.swerveio.log.DashboardSwerveLogger;
 import net.bancino.robotics.swerveio.module.AbstractSwerveModule;
 import frc.robot.modules.MK2Swerve;
 import net.bancino.robotics.swerveio.pid.AbstractPIDController;
+import net.bancino.robotics.swerveio.gyro.NavXGyro;
 
 /**
  * The drivetrain subsystem drives the robot! (wow!).
@@ -112,7 +113,7 @@ public class DriveTrain extends SwerveDrive {
       public void initialize(SwerveDrive swerve) {
         swerve.zeroDriveEncoders();
         swerve.setFieldCentric(true);
-
+        
         // swerve.setIdleAngle(0, false);
 
         swerve.startLogging(new DashboardSwerveLogger());

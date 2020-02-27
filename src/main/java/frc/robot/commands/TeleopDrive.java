@@ -50,7 +50,7 @@ public class TeleopDrive extends CommandBase {
         }
 
         addRequirements(swerve);
-        setDeadband(0.5);
+        setDeadband(0.2);
         setThrottle(0.9);
     }
 
@@ -75,9 +75,9 @@ public class TeleopDrive extends CommandBase {
 
     @Override
     public void execute() {
-        double fwd = - throttle(deadband(driveJoystick.getRawAxis(fwdAxis.value)));
-        double str = throttle(deadband(driveJoystick.getRawAxis(strAxis.value)));
-        double rcw = throttle(deadband(rotationJoystick.getRawAxis(rcwAxis.value)));
+        double fwd = throttle(deadband(driveJoystick.getRawAxis(fwdAxis.value)));
+        double str = -throttle(deadband(driveJoystick.getRawAxis(strAxis.value)));
+        double rcw = -throttle(deadband(rotationJoystick.getRawAxis(rcwAxis.value)));
         SwerveVector joystickVector = new SwerveVector(fwd, str, rcw);
         swerve.drive(joystickVector);
     }

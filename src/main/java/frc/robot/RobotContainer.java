@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
@@ -19,14 +18,15 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutoCommand;
+import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.Location;
+import frc.robot.commands.PivotCommand;
 import frc.robot.commands.ShooterControl;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.auton.Alderaan;
 import frc.robot.commands.auton.Drive;
-import frc.robot.commands.auton.Launch;
-import frc.robot.commands.auton.PathWeaverAuton;
 import frc.robot.commands.auton.Rotate;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Indexer;
@@ -60,6 +60,7 @@ public class RobotContainer {
   private final IntakeCommand _intakeCommand = new IntakeCommand(_intake);
   private final IndexerCommand _indexerCommand = new IndexerCommand(_indexer);
   private final ShooterControl _shooter_command = new ShooterControl(_shooter);
+  private final ClimberCommand extend = new ClimberCommand();
 
   private final AutoCommand m_autoCommand = new AutoCommand();
 
@@ -110,6 +111,16 @@ public class RobotContainer {
         drive.getGyro().zero();
       }, drive));
 
+      new JoystickButton(leftJoy, 8).whenPressed(() -> extend.extend());
+      new JoystickButton(leftJoy, 8).whenReleased(() -> extend.stop());
+      new JoystickButton(leftJoy, 9).whenPressed(() -> extend.retract());
+      new JoystickButton(leftJoy, 9).whenReleased(() -> extend.stop());
+
+    new JoystickButton(xboxController, 1).whenPressed(new PivotCommand(_shooter, Location.Trench));
+    new JoystickButton(xboxController, 2).whenPressed(new PivotCommand(_shooter, Location.Auton));
+    new JoystickButton(xboxController, 3).whenPressed(new PivotCommand(_shooter, Location.LiftLock));
+    new JoystickButton(xboxController, 4).whenPressed(new PivotCommand(_shooter, Location.LiftOpen));
+
     new JoystickButton(xboxController, 6).whenPressed(() -> _shooter_command.fire());
     new JoystickButton(xboxController, 6).whenReleased(() -> _shooter_command.stop());
   }
@@ -126,10 +137,14 @@ public class RobotContainer {
       new InstantCommand(() -> {
         drive.getGyro().zero();
       }),
-        new Rotate(drive, (NavXGyro) drive.getGyro(), 90, 3000, _shooter),
-        // new Launch(_shooter, _vision, 6)
-        new Alderaan(_shooter, _vision, _intake, _indexer),
-        new Drive(drive, .5, 1)
+      new PivotCommand(_shooter, -949),
+      new ParallelCommandGroup(
+        new Rotate(drive, (NavXGyro) drive.getGyro(), 90, 3000, _shooter, true),
+        new PivotCommand(_shooter, Location.Auton)
+      ),
+      new Alderaan(_shooter, _vision, _intake, _indexer),
+      new Rotate(drive, (NavXGyro) drive.getGyro(), 90, 3000, _shooter, false),
+      new Drive(drive, .5, 1)
     );
 
 
