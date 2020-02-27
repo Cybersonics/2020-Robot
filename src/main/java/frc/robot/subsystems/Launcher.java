@@ -53,7 +53,7 @@ public class Launcher extends SubsystemBase {
 
   // Public Methods
 
-  public void calculatedLaunch(final double speed) {
+  public void calculatedLaunch(double speed) {
     _rightMotor.set(speed);
     _leftMotor.set(speed);
   }

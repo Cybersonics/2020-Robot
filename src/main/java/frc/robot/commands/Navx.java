@@ -1,8 +1,12 @@
 package frc.robot.commands;
+
 import com.kauailabs.navx.frc.AHRS;
+
+import org.frcteam2910.common.math.Rotation2;
+
 import edu.wpi.first.wpilibj.SPI;
 
-public class Navx{
+public class Navx {
     public  AHRS navX; 
     public  double zeroHeading;
     public  double zeroAngle;
@@ -34,6 +38,7 @@ public class Navx{
      public void getFuzedHeading() {
         this.zeroHeading = this.navX.getFusedHeading();
      }
+
      public void getAngle() {
          this.zeroAngle = this.navX.getAngle();
      }

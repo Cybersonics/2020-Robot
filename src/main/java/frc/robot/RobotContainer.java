@@ -22,10 +22,12 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutoCommand;
 import frc.robot.commands.ClimberCommand;
+import frc.robot.commands.AutonSelector;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.Navx;
+import frc.robot.commands.auton.AutonRoutines;
 import frc.robot.commands.LauncherCommand;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -45,7 +47,7 @@ public class RobotContainer {
   
   // The robot's subsystems and commands are defined here...
   // #region Subsystems
-  private final DrivetrainSubsystem _drive = new DrivetrainSubsystem();
+  private final DrivetrainSubsystem _drive = DrivetrainSubsystem.getInstance();
   private final Indexer _indexer = new Indexer();
   private final Intake _intake = new Intake();
   private final Launcher _launcher = new Launcher();
@@ -174,10 +176,6 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public  AutoCommand getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
-  }
 
   // #endregion End Public Commands
 }
