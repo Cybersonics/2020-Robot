@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.function.DoubleSupplier;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -75,21 +76,25 @@ public class Drive extends SubsystemBase {
 		driveLeftFront = new CANSparkMax(Constants.DRIVE_FRONT_LEFT_DRIVE_MOTOR, MotorType.kBrushless);
 		driveLeftFront.restoreFactoryDefaults();
 		driveLeftFront.setInverted(false);
+		driveLeftFront.setIdleMode(IdleMode.kBrake);
 		driveLeftFront.setOpenLoopRampRate(RAMP_RATE);
 
 		driveLeftRear = new CANSparkMax(Constants.DRIVE_BACK_LEFT_DRIVE_MOTOR, MotorType.kBrushless);
 		driveLeftRear.restoreFactoryDefaults();
 		driveLeftRear.setInverted(false);
+		driveLeftRear.setIdleMode(IdleMode.kBrake);
 		driveLeftRear.setOpenLoopRampRate(RAMP_RATE);
 
 		driveRightFront = new CANSparkMax(Constants.DRIVE_FRONT_RIGHT_DRIVE_MOTOR, MotorType.kBrushless);
 		driveRightFront.restoreFactoryDefaults();
 		driveRightFront.setInverted(false);
+		driveRightFront.setIdleMode(IdleMode.kBrake);
 		driveRightFront.setOpenLoopRampRate(RAMP_RATE);
 
 		driveRightRear = new CANSparkMax(Constants.DRIVE_BACK_RIGHT_DRIVE_MOTOR, MotorType.kBrushless);
 		driveRightRear.restoreFactoryDefaults();
 		driveRightRear.setInverted(false);
+		driveRightRear.setIdleMode(IdleMode.kBrake);
 		driveRightRear.setOpenLoopRampRate(RAMP_RATE);
 
 		inputLeftFront = new AnalogInput(Constants.DRIVE_FRONT_LEFT_STEER_ENCODER);
