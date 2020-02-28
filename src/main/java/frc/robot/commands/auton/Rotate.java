@@ -61,6 +61,6 @@ public class Rotate extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(targetAngle - gyro.getContinuousAngle()*-1) < 7 || targetAngle < (gyro.getContinuousAngle()*-1);
+    return Math.abs(targetAngle - gyro.getContinuousAngle()*-1) < 2 || targetAngle < (gyro.getContinuousAngle()*-1);
   }
 }

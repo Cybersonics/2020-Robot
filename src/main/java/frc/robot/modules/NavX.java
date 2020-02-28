@@ -1,13 +1,14 @@
 package frc.robot.modules;
 
 import edu.wpi.first.wpilibj.SPI;
+import frc.robot.commands.auton.Orientation;
 import net.bancino.robotics.swerveio.gyro.AbstractGyro;
 
 import com.kauailabs.navx.frc.AHRS;
 
 /**
- * A Kauai Labs FRC NavX Gyro that implements the abstract 
- * gyro interface for use with the swerve drive.
+ * A Kauai Labs FRC NavX Gyro that implements the abstract gyro interface for
+ * use with the swerve drive.
  * 
  * @author Jordan Bancino
  * @version 2.0.0
@@ -16,6 +17,7 @@ import com.kauailabs.navx.frc.AHRS;
 public class NavX implements AbstractGyro {
 
     private final AHRS gyro;
+    private double offset;
 
     /**
      * Create a gyro object on the given port.
@@ -24,7 +26,7 @@ public class NavX implements AbstractGyro {
      */
     public NavX(SPI.Port port) {
         if (port != null) {
-            gyro = new AHRS(port);
+            gyro = new AHRS(port, (byte)200);
         } else {
             throw new IllegalArgumentException("NavX Port cannot be null.");
         }
@@ -39,12 +41,12 @@ public class NavX implements AbstractGyro {
             return yaw;
         }
     }
-    
+
     /**
-     * The NavX gyro has an option for getting the continuous angle
-     * of the yaw. This doesn't reset at 0 or 360, but rather, continues
-     * counting up or down, depending on the direction. This therefore may
-     * return numbers greater than 360, or less than 0.
+     * The NavX gyro has an option for getting the continuous angle of the yaw. This
+     * doesn't reset at 0 or 360, but rather, continues counting up or down,
+     * depending on the direction. This therefore may return numbers greater than
+     * 360, or less than 0.
      * 
      * @return The continuous angle of the NavX gyro.
      */
@@ -57,9 +59,24 @@ public class NavX implements AbstractGyro {
         gyro.zeroYaw();
     }
 
-    // public void setStartingRotation(Direction direction) {
-    //     setAdjustmentAngle(getUnadjustedAngle().rotateBy(direction));
-    // }
+    public void setStartingRotation(Orientation orientation) {
+        switch (orientation) {
+            case Backwards:
+                offset = 180;
+                break;
+            case Forward:
+                offset = 0;
+                break;
+            case Left:
+                offset = 270;
+                break;
+            case Right:
+                offset = 90;
+                break;
+            default:
+                offset = 0;
+        }
+    }
 
     /**
      * Whether or not the gyro is conncted. This is useful for debugging, or waiting

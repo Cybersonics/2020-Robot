@@ -26,6 +26,8 @@ import frc.robot.commands.PivotCommand;
 import frc.robot.commands.ShooterControl;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.auton.Alderaan;
+import frc.robot.commands.auton.AutonRoutines;
+import frc.robot.commands.auton.AutonSelector;
 import frc.robot.commands.auton.Drive;
 import frc.robot.commands.auton.Rotate;
 import frc.robot.subsystems.DriveTrain;
@@ -52,17 +54,18 @@ public class RobotContainer {
   
   private final Intake _intake = new Intake();
   private final Indexer _indexer = new Indexer();
-  private final Launcher _shooter = new Launcher();
+  private final Launcher _launcher = new Launcher();
   private final Vision _vision = new Vision();
-  public static DriveTrain drive;
+  public static DriveTrain _drive;
   private final NavXGyro gyro = new NavXGyro(SPI.Port.kMXP);
   
   private final IntakeCommand _intakeCommand = new IntakeCommand(_intake);
   private final IndexerCommand _indexerCommand = new IndexerCommand(_indexer);
-  private final ShooterControl _shooter_command = new ShooterControl(_shooter);
+  private final ShooterControl _shooterCommand = new ShooterControl(_launcher);
   private final ClimberCommand extend = new ClimberCommand();
 
-  private final AutoCommand m_autoCommand = new AutoCommand();
+  private final AutonRoutines routines;
+  private final AutonSelector autonSelector;
 
   public static Joystick leftJoy;
   public static Joystick rightJoy;
@@ -77,16 +80,18 @@ public class RobotContainer {
     xboxController = new XboxController(Constants.XBOX_CONTROLLER);
 
     /* Construct our subsystems here if they throw exceptions. */
-    drive = DriveTrain.getInstance(gyro);
-
+    _drive = DriveTrain.getInstance(gyro);
+    routines = new AutonRoutines(_drive, _launcher, _vision, _intake, _indexer);
+    autonSelector = new AutonSelector(routines);
+    
     configureCommands();
     configureButtonBindings();
   }
 
   private void configureCommands() {
     /* The drivetrain uses three axes: forward, strafe, and angular velocity, in that order. */
-    TeleopDrive swerveDriveTeleop = new TeleopDrive(drive, leftJoy, Joystick.AxisType.kY, Joystick.AxisType.kX, rightJoy, Joystick.AxisType.kX);
-    drive.setDefaultCommand(swerveDriveTeleop);
+    TeleopDrive swerveDriveTeleop = new TeleopDrive(_drive, leftJoy, Joystick.AxisType.kY, Joystick.AxisType.kX, rightJoy, Joystick.AxisType.kX);
+    _drive.setDefaultCommand(swerveDriveTeleop);
     
     _indexer.setDefaultCommand(new IndexerCommand(
       _indexer,
@@ -108,21 +113,22 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(leftJoy, 7)
       .whenPressed(new RunnableCommand(() -> {
-        drive.getGyro().zero();
-      }, drive));
+        _drive.getGyro().zero();
+      }, _drive)
+    );
 
-      new JoystickButton(leftJoy, 8).whenPressed(() -> extend.extend());
-      new JoystickButton(leftJoy, 8).whenReleased(() -> extend.stop());
-      new JoystickButton(leftJoy, 9).whenPressed(() -> extend.retract());
-      new JoystickButton(leftJoy, 9).whenReleased(() -> extend.stop());
+    new JoystickButton(rightJoy, 2).whenPressed(() -> extend.extend());
+    new JoystickButton(rightJoy, 2).whenReleased(() -> extend.stop());
+    new JoystickButton(rightJoy, 3).whenPressed(() -> extend.retract());
+    new JoystickButton(rightJoy, 3).whenReleased(() -> extend.stop());
 
-    new JoystickButton(xboxController, 1).whenPressed(new PivotCommand(_shooter, Location.Trench));
-    new JoystickButton(xboxController, 2).whenPressed(new PivotCommand(_shooter, Location.Auton));
-    new JoystickButton(xboxController, 3).whenPressed(new PivotCommand(_shooter, Location.LiftLock));
-    new JoystickButton(xboxController, 4).whenPressed(new PivotCommand(_shooter, Location.LiftOpen));
+    new JoystickButton(xboxController, 1).whenPressed(new PivotCommand(_launcher, Location.Trench));
+    new JoystickButton(xboxController, 4).whenPressed(new PivotCommand(_launcher, Location.Auton));
+    new JoystickButton(xboxController, 3).whenPressed(new PivotCommand(_launcher, Location.LiftLock));
+    new JoystickButton(xboxController, 2).whenPressed(new PivotCommand(_launcher, Location.LiftOpen));
 
-    new JoystickButton(xboxController, 6).whenPressed(() -> _shooter_command.fire());
-    new JoystickButton(xboxController, 6).whenReleased(() -> _shooter_command.stop());
+    new JoystickButton(xboxController, 6).whenPressed(() -> _shooterCommand.fire());
+    new JoystickButton(xboxController, 6).whenReleased(() -> _shooterCommand.stop());
   }
 
   /**
@@ -133,19 +139,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // This command will run in autonomous
 
-    return new SequentialCommandGroup(
-      new InstantCommand(() -> {
-        drive.getGyro().zero();
-      }),
-      new PivotCommand(_shooter, -949),
-      new ParallelCommandGroup(
-        new Rotate(drive, (NavXGyro) drive.getGyro(), 90, 3000, _shooter, true),
-        new PivotCommand(_shooter, Location.Auton)
-      ),
-      new Alderaan(_shooter, _vision, _intake, _indexer),
-      new Rotate(drive, (NavXGyro) drive.getGyro(), 90, 3000, _shooter, false),
-      new Drive(drive, .5, 1)
-    );
+    return autonSelector.getCommand();
 
 
     // try {

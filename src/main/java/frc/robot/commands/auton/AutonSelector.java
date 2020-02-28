@@ -20,13 +20,17 @@ public class AutonSelector {
   private static SendableChooser<Side> sideChooser;
   private static SendableChooser<Orientation> orientationChooser;
 
+  private AutonRoutines _routines;
+
   static {
     final ShuffleboardTab autonTab = Shuffleboard.getTab("Autonomous settings");
 
     sideChooser = new SendableChooser<>();
+    
     sideChooser.addOption("Left", Side.Left);
-    sideChooser.addOption("Center", Side.Center);
-    sideChooser.setDefaultOption("Right", Side.Right);
+    sideChooser.setDefaultOption("Center", Side.Center);
+    sideChooser.addOption("Right", Side.Right);
+    sideChooser.addOption("Nothing", null);
     autonTab.add("Starting Side", sideChooser);
 
     orientationChooser = new SendableChooser<>();
@@ -37,23 +41,24 @@ public class AutonSelector {
     autonTab.add("Starting Orientation", orientationChooser);
   }
 
-  public AutonSelector() {
+  public AutonSelector(AutonRoutines routines) {
+    this._routines = routines;
   }
 
   public Command getCommand() {
     final Orientation startingOrientation = orientationChooser.getSelected();
     final Side startingSide = sideChooser.getSelected();
 
-      SequentialCommandGroup group = new SequentialCommandGroup(
-        new InstantCommand(() -> {
-          RobotContainer.drive.getGyro().zero();
-        })
-      );
-
-      // group.addCommands(
-      //   new FollowRoutine(this.routines.getMoveBackTrajectory(startingSide))
-      // );
-       
-        return group;
+    Command group;
+    if(startingSide == Side.Left) {
+      group = _routines.getRotateFireMove(startingOrientation, startingSide);
+    } else if (startingSide == Side.Right) {
+      group = _routines.getRotateFireMove(startingOrientation, startingSide);
+    } else {
+      group = _routines.getRotateFireMove(startingOrientation, startingSide);
     }
+       
+    return group;
+
+  }
 }

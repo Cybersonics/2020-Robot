@@ -15,6 +15,7 @@ public class PivotCommand extends CommandBase {
   private Launcher _launcher;
   private double _pivotSetpoint;
 
+
   /**
    * Creates a new PivotCommand.
    */
