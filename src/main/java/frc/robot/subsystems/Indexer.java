@@ -12,37 +12,34 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
 
 public class Indexer extends SubsystemBase {
+  private VictorSPX _indexMotor;
+  public final double MAX_INDEXER_SPEED = 1.0; 
 
-  public static VictorSPX IndexerMotor;
-  public final int INTERVAL_OF_STOPS = 100;
-  public static double UntilStop;
-  
-  private CommandScheduler scheduler;
-  /**
-   * Creates a new ExampleSubsystem.
-   */
   public Indexer () {
+    CommandScheduler.getInstance().registerSubsystem(this);
 
-    scheduler = CommandScheduler.getInstance();
-    scheduler.registerSubsystem(this);
+    _indexMotor = new VictorSPX(Constants.INDEXER_VICTOR);
+    _indexMotor.configFactoryDefault();
+  }
 
-    IndexerMotor = new VictorSPX(Constants.INDEXER_VICTOR);
-    IndexerMotor.configFactoryDefault();
-
+  public void manualControl(double speed) {
+    _indexMotor.set(ControlMode.PercentOutput,speed);
   }
 
   public void forward(){
-    IndexerMotor.set(ControlMode.PercentOutput, 1.0);
+    this.manualControl(MAX_INDEXER_SPEED);
   } 
+  
   public void reverse(){
-    IndexerMotor.set(ControlMode.PercentOutput, -1.0);
+    this.manualControl(-MAX_INDEXER_SPEED);
   } 
 
-  public void StopMotor(){
-    IndexerMotor.set(ControlMode.PercentOutput,0);
+  public void stop(){
+    this.manualControl(0);
   }    
  
 }

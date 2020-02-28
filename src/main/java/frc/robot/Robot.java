@@ -7,11 +7,19 @@
 
 package frc.robot;
 
+import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
+
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.AutoCommand;
+import frc.robot.commands.PivotCommand;
 import frc.robot.subsystems.Drive;
 
 
@@ -25,7 +33,7 @@ import frc.robot.subsystems.Drive;
 public class Robot extends TimedRobot {
 
   public static XboxController xBoxController;
-  private AutoCommand m_autonomousCommand;
+  private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
 
   /**
@@ -38,9 +46,10 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    //instantiates xbox object
-    xBoxController = new XboxController(Constants.XBOX_CONTROLLER);
-
+    new Thread(() -> {
+      UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+      camera.setResolution(640, 480);
+    }).start();
     
   }
 
@@ -92,6 +101,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    CommandScheduler.getInstance().run();
   }
 
   @Override
@@ -127,16 +137,16 @@ public class Robot extends TimedRobot {
   }
 
   public void updateDashBoard() {
-    double[] encoders = Drive.getEncoderValues();
-		SmartDashboard.putNumber(("LeftFront AnalogInput position: "), encoders[0]);
-		SmartDashboard.putNumber(("LeftRear AnalogInput position: "), encoders[1]);
-		SmartDashboard.putNumber(("RightFront AnalogInput position: "), encoders[2]);
-		SmartDashboard.putNumber(("RightRear AnalogInput position: "), encoders[3]);
+    // double[] encoders = Drive.getEncoderValues();
+		// SmartDashboard.putNumber(("LeftFront AnalogInput position: "), encoders[0]);
+		// SmartDashboard.putNumber(("LeftRear AnalogInput position: "), encoders[1]);
+		// SmartDashboard.putNumber(("RightFront AnalogInput position: "), encoders[2]);
+		// SmartDashboard.putNumber(("RightRear AnalogInput position: "), encoders[3]);
 
-    double[] encoder = Drive.getEncoderVal();
-		SmartDashboard.putNumber(("LeftFront Analog position: "), encoder[0]);
-		SmartDashboard.putNumber(("LeftRear Analog position: "), encoder[1]);
-		SmartDashboard.putNumber(("RightFront Analog position: "), encoder[2]);
-		SmartDashboard.putNumber(("RightRear Analog position: "), encoder[3]);
+    // double[] encoder = Drive.getEncoderVal();
+		// SmartDashboard.putNumber(("LeftFront Analog position: "), encoder[0]);
+		// SmartDashboard.putNumber(("LeftRear Analog position: "), encoder[1]);
+		// SmartDashboard.putNumber(("RightFront Analog position: "), encoder[2]);
+		// SmartDashboard.putNumber(("RightRear Analog position: "), encoder[3]);
   }
 }
