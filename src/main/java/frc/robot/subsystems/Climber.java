@@ -34,8 +34,6 @@ public class Climber extends SubsystemBase {
 
         ClimberTalon = new TalonSRX(Constants.CLIMBER);
         ClimberTalon.configFactoryDefault();
-        //ClimberServo = new Servo(CLIMBER_SERVO); 
-        //ClimberServo.configFactoryDefault();//might be unnessisary
 
         ClimbSpeed = 0.6;
     }

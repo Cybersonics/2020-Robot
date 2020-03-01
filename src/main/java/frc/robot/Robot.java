@@ -46,10 +46,10 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    new Thread(() -> {
-      UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-      camera.setResolution(640, 480);
-    }).start();
+    // new Thread(() -> {
+    //   UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+    //   camera.setResolution(640, 480);
+    // }).start();
     
   }
 

@@ -21,7 +21,7 @@ public class TeleopDrive extends CommandBase {
     private Joystick rotationJoystick;
     private Joystick.AxisType fwdAxis, strAxis, rcwAxis;
 
-    private double deadband, throttle;
+    private double deadband, throttle, rotationThrottle;
 
     /**
      * Create a new swerve drive joystick command.
@@ -52,6 +52,7 @@ public class TeleopDrive extends CommandBase {
         addRequirements(swerve);
         setDeadband(0.2);
         setThrottle(0.9);
+        setRotationThrottle(0.7);
     }
 
     /**
@@ -73,11 +74,16 @@ public class TeleopDrive extends CommandBase {
       this.throttle = throttle;
     }
 
+    
+    public void setRotationThrottle(double throttle) {
+      this.rotationThrottle = throttle;
+    }
+
     @Override
     public void execute() {
         double fwd = throttle(deadband(driveJoystick.getRawAxis(fwdAxis.value)));
         double str = -throttle(deadband(driveJoystick.getRawAxis(strAxis.value)));
-        double rcw = -throttle(deadband(rotationJoystick.getRawAxis(rcwAxis.value)));
+        double rcw = -throttleRotation(deadband(rotationJoystick.getRawAxis(rcwAxis.value)));
         SwerveVector joystickVector = new SwerveVector(fwd, str, rcw);
         swerve.drive(joystickVector);
     }
@@ -87,9 +93,12 @@ public class TeleopDrive extends CommandBase {
         return false;
     }
 
-  private double throttle(double raw) {
-    return raw * throttle;
-  }
+    private double throttle(double raw) {
+      return raw * throttle;
+    }
+    private double throttleRotation(double raw) {
+      return raw * rotationThrottle;
+    }
 
   /**
    * Calculate a deadband

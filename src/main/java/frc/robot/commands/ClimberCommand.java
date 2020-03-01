@@ -38,11 +38,11 @@ public class ClimberCommand extends CommandBase {
   }
 
   public void extend(){
-    ClimberMotor.set(ControlMode.PercentOutput, 0.5);
+    ClimberMotor.set(ControlMode.PercentOutput, -0.5);
   }
 
   public void retract(){
-    ClimberMotor.set(ControlMode.PercentOutput, -(0.5));
+    ClimberMotor.set(ControlMode.PercentOutput, 0.5);
   }
 
   public void stop(){

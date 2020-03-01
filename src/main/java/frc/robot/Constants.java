@@ -22,6 +22,7 @@ public final class Constants {
     public final static int XBOX_CONTROLLER = 2;
 
     public final static int INTAKE_VICTOR = 5;
+    public final static int MECH_INTAKE_TALON = 7;
     public final static int INDEXER_VICTOR = 4;
     public final static int SHOOTER_SPARK_ONE = 1;
     public final static int SHOOTER_SPARK_TWO = 2;
@@ -59,7 +60,7 @@ public final class Constants {
 
     public static final int DRIVE_BACK_LEFT_STEER_ENCODER = 1;
     public static final int DRIVE_BACK_LEFT_STEER_MOTOR = 21;
-    public static final double DRIVE_BACK_LEFT_STEER_OFFSET = 12.0;
+    public static final double DRIVE_BACK_LEFT_STEER_OFFSET = 90.0;
     public static final int DRIVE_BACK_LEFT_DRIVE_MOTOR = 11;
 
     public static final int DRIVE_BACK_RIGHT_STEER_ENCODER = 2;

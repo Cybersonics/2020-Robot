@@ -14,14 +14,16 @@ public class PivotCommand extends CommandBase {
 
   private Launcher _launcher;
   private double _pivotSetpoint;
+  private boolean _isAdditive;
 
 
   /**
    * Creates a new PivotCommand.
    */
-  public PivotCommand(Launcher launcher, double pivotSetpoint) {
+  public PivotCommand(Launcher launcher, double pivotSetpoint, boolean isAdditive) {
     this._launcher = launcher;
     this._pivotSetpoint = pivotSetpoint;
+    this._isAdditive = isAdditive ? true : false;
     addRequirements(launcher);
   }
 
@@ -29,8 +31,10 @@ public class PivotCommand extends CommandBase {
   @Override
   public void initialize() {
     if (this._pivotSetpoint > -700) {
-    System.out.println("[PivotCommand] Ending command bad setpoint passed");
-    end(true);
+      System.out.println("[PivotCommand] Ending command bad setpoint passed");
+      end(true);
+    } else if (this._isAdditive) {
+      this._pivotSetpoint += Launcher.getPivotAngle();
     }
   }
 
