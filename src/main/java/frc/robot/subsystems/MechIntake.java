@@ -15,32 +15,32 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class MechIntake extends SubsystemBase {
-  // public TalonSRX _intakeMotor;
-  // public final double MAX_INTAKE_SPEED = .50;
+  public TalonSRX _intakeMotor;
+  public final double MAX_INTAKE_SPEED = .50;
 
-  // /**
-  //  * Creates a new MechIntake.
-  //  */
-  // public MechIntake() {
-  //   CommandScheduler.getInstance().registerSubsystem(this);
+  /**
+   * Creates a new MechIntake.
+   */
+  public MechIntake() {
+    CommandScheduler.getInstance().registerSubsystem(this);
     
-  //   _intakeMotor = new TalonSRX(Constants.MECH_INTAKE_TALON);
-  //   _intakeMotor.configFactoryDefault();
-  // }
+    _intakeMotor = new TalonSRX(Constants.MECH_INTAKE_TALON);
+    _intakeMotor.configFactoryDefault();
+  }
 
-  // public void manualControl(double speed) {
-  //   _intakeMotor.set(ControlMode.PercentOutput, speed * MAX_INTAKE_SPEED);
-  // }
+  public void manualControl(double speed) {
+    _intakeMotor.set(ControlMode.PercentOutput, speed * MAX_INTAKE_SPEED);
+  }
 
-  // public void forward() {
-  //   this.manualControl(MAX_INTAKE_SPEED);
-  // }
+  public void forward() {
+    this.manualControl(MAX_INTAKE_SPEED);
+  }
 
-  // public void reverse() {
-  //   this.manualControl(-MAX_INTAKE_SPEED);
-  // }
+  public void reverse() {
+    this.manualControl(-MAX_INTAKE_SPEED);
+  }
 
-  // public void stop() {
-  //   this.manualControl(0);
-  // }
+  public void stop() {
+    this.manualControl(0);
+  }
 }

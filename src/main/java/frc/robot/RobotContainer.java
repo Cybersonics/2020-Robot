@@ -47,7 +47,7 @@ public class RobotContainer {
   */
   
   private final Intake _intake = new Intake();
-  // private final MechIntake _mechIntake = new MechIntake();
+  private final MechIntake _mechIntake = new MechIntake();
   private final Indexer _indexer = new Indexer();
   private final Launcher _launcher = new Launcher();
   private final Vision _vision = new Vision();
@@ -98,10 +98,10 @@ public class RobotContainer {
       () -> xboxController.getY(Hand.kLeft)
     ));
 
-    // _mechIntake.setDefaultCommand(new MechIntakeCommand (
-    //   _mechIntake,
-    //   () -> xboxController.getX(Hand.kLeft)
-    // ));
+    _mechIntake.setDefaultCommand(new MechIntakeCommand (
+      _mechIntake,
+      () -> xboxController.getX(Hand.kLeft)
+    ));
   }
 
   /**
