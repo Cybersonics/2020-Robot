@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Location;
-import frc.robot.commands.PivotCommand;
+import frc.robot.commands.SnapPivotCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
@@ -47,13 +47,13 @@ public class AutonRoutines {
                 new InstantCommand(() -> {
                     _drive.getGyro().zero();
                 }), 
-                new PivotCommand(_launcher, -850, false),
+                new SnapPivotCommand(_launcher, -850),
                 new ParallelCommandGroup(
                     new Rotate(_drive, (NavXGyro) _drive.getGyro(), 61, 3500, _launcher, true),
-                    new PivotCommand(_launcher, Location.Auton+10, false)
+                    new SnapPivotCommand(_launcher, Location.Auton+10)
                 ),
                 new Alderaan(_launcher, _vision, _intake, _indexer),
-                new Drive(_drive, .3, .5)
+                new AutonDrive(_drive, .3, .5)
             );
         } else if ( Side.Right == side) {
             group = new SequentialCommandGroup(
@@ -61,11 +61,11 @@ public class AutonRoutines {
                     _drive.getGyro().zero();
                 }), 
                 new ParallelCommandGroup(new Rotate(_drive, (NavXGyro) _drive.getGyro(), 100, 3500, _launcher, true),
-                    new PivotCommand(_launcher, Location.Auton, false)
+                    new SnapPivotCommand(_launcher, Location.Auton)
                 ),
                 new Alderaan(_launcher, _vision, _intake, _indexer),
                 new Rotate(_drive, (NavXGyro) _drive.getGyro(), 58, 3000, _launcher, false),
-                new Drive(_drive, .5, 1)
+                new AutonDrive(_drive, .5, 1)
             );
         } else if (Side.Center == side) {
             group = new SequentialCommandGroup(
@@ -74,11 +74,11 @@ public class AutonRoutines {
                 }), 
                 new ParallelCommandGroup(
                     new Rotate(_drive, (NavXGyro) _drive.getGyro(), 83, 3000, _launcher, true),
-                    new PivotCommand(_launcher, Location.Auton, false)
+                    new SnapPivotCommand(_launcher, Location.Auton)
                 ),
                 new Alderaan(_launcher, _vision, _intake, _indexer),
                 new Rotate(_drive, (NavXGyro) _drive.getGyro(), 90, 3000, _launcher, false),
-                new Drive(_drive, .5, 1)
+                new AutonDrive(_drive, .5, 1)
             );
         } else {
            group = new InstantCommand();

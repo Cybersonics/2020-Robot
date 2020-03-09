@@ -50,22 +50,25 @@ public final class Constants {
     
     public static final int DRIVE_FRONT_LEFT_STEER_ENCODER = 0;
     public static final int DRIVE_FRONT_LEFT_STEER_MOTOR = 20;
-    public static final double DRIVE_FRONT_LEFT_STEER_OFFSET = 60.0;
+    public static final double DRIVE_FRONT_LEFT_STEER_OFFSET = 59.0;
     public static final int DRIVE_FRONT_LEFT_DRIVE_MOTOR = 10;
 
     public static final int DRIVE_FRONT_RIGHT_STEER_ENCODER = 3;
     public static final int DRIVE_FRONT_RIGHT_STEER_MOTOR = 23;
-    public static final double DRIVE_FRONT_RIGHT_STEER_OFFSET = 19.0;
+    public static final double DRIVE_FRONT_RIGHT_STEER_OFFSET = 198.0;
     public static final int DRIVE_FRONT_RIGHT_DRIVE_MOTOR = 13;
 
     public static final int DRIVE_BACK_LEFT_STEER_ENCODER = 1;
     public static final int DRIVE_BACK_LEFT_STEER_MOTOR = 21;
-    public static final double DRIVE_BACK_LEFT_STEER_OFFSET = 35.0;
+    public static final double DRIVE_BACK_LEFT_STEER_OFFSET = 214.0;
     public static final int DRIVE_BACK_LEFT_DRIVE_MOTOR = 11;
 
     public static final int DRIVE_BACK_RIGHT_STEER_ENCODER = 2;
     public static final int DRIVE_BACK_RIGHT_STEER_MOTOR = 22;
-    public static final double DRIVE_BACK_RIGHT_STEER_OFFSET = -203.0;
+    public static final double DRIVE_BACK_RIGHT_STEER_OFFSET = 165.0;
     public static final int DRIVE_BACK_RIGHT_DRIVE_MOTOR = 12;
+
+	public static final int OutterLightRingId = 0;
+	public static final int InnerLightRingId = 1;
     
 }

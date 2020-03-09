@@ -13,13 +13,16 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.IndexerCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.Location;
-import frc.robot.commands.PivotCommand;
+import frc.robot.commands.MechIntakeCommand;
 import frc.robot.commands.ShooterControl;
+import frc.robot.commands.SnapPivotCommand;
+import frc.robot.commands.AdjustPivotCommand;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.auton.AutonRoutines;
 import frc.robot.commands.auton.AutonSelector;
@@ -90,17 +93,17 @@ public class RobotContainer {
     
     _indexer.setDefaultCommand(new IndexerCommand(
       _indexer,
-      () -> xboxController.getY(Hand.kRight)
+      () -> deadband(0.3, xboxController.getY(Hand.kRight))
     ));
 
     _intake.setDefaultCommand(new IntakeCommand(
       _intake, 
-      () -> xboxController.getY(Hand.kLeft)
+      () -> deadband(0.3, xboxController.getY(Hand.kLeft))
     ));
 
     _mechIntake.setDefaultCommand(new MechIntakeCommand (
       _mechIntake,
-      () -> xboxController.getX(Hand.kLeft)
+      () -> deadband(0.3, xboxController.getX(Hand.kLeft))
     ));
   }
 
@@ -118,17 +121,20 @@ public class RobotContainer {
     );
 
     new JoystickButton(rightJoy, 3).whenPressed(() -> extend.extend());
-    new JoystickButton(rightJoy, 3).whenPressed(new PivotCommand(_launcher, Location.LiftOpen, false));
+    new JoystickButton(rightJoy, 3).whenPressed(new SnapPivotCommand(_launcher, Location.LiftOpen));
     new JoystickButton(rightJoy, 3).whenReleased(() -> extend.stop());
     new JoystickButton(rightJoy, 2).whenPressed(() -> extend.retract());
-    new JoystickButton(rightJoy, 2).whenPressed(new PivotCommand(_launcher, Location.LiftLock, false));
+    new JoystickButton(rightJoy, 2).whenPressed(new SnapPivotCommand(_launcher, Location.LiftLock));
     new JoystickButton(rightJoy, 2).whenReleased(() -> extend.stop());
 
-    new JoystickButton(xboxController, 1).whenPressed(new PivotCommand(_launcher, Location.Trench, false));
-    new JoystickButton(xboxController, 4).whenPressed(new PivotCommand(_launcher, Location.Auton, false));
-    new JoystickButton(xboxController, 2).whenPressed(new PivotCommand(_launcher, 10, true));
-    new JoystickButton(xboxController, 3).whenPressed(new PivotCommand(_launcher, -10, true));
+    new JoystickButton(xboxController, 1).whenPressed(new SnapPivotCommand(_launcher, Location.Trench));
+    new JoystickButton(xboxController, 4).whenPressed(new SnapPivotCommand(_launcher, Location.Auton));
+    new JoystickButton(xboxController, 2).whenPressed(new AdjustPivotCommand(_launcher, 15));
+    new JoystickButton(xboxController, 3).whenPressed(new AdjustPivotCommand(_launcher, -15));
 
+    new JoystickButton(xboxController, 5).whenPressed(() -> _vision.turnOnLightRings());
+    new JoystickButton(xboxController, 7).whenPressed(() -> _vision.turnOffLightRings());
+    
     new JoystickButton(xboxController, 6).whenPressed(() -> _shooterCommand.fire());
     new JoystickButton(xboxController, 6).whenReleased(() -> _shooterCommand.stop());
   }
@@ -151,6 +157,33 @@ public class RobotContainer {
     //   DriverStation.reportError("Could not load pathweaver swerve drive.", true);
     //   return null;
     // }
+  }
+
+  /**
+   * Calculate a deadband
+   * 
+   * @param raw The input on the joystick to mod
+   * @return The result of the mod.
+   */
+  private double deadband(double deadband, double raw) {
+    /* This will be our result */
+    double mod;
+    /* Compute the deadband mod */
+    if (raw < 0.0d) {
+      if (raw <= -deadband) {
+        mod = (raw + deadband) / (1 - deadband);
+      } else {
+        mod = 0.0d;
+      }
+    } else {
+      if (raw >= deadband) {
+        mod = (raw - deadband) / (1 - deadband);
+      } else {
+        mod = 0.0d;
+      }
+    }
+    /* Return the result. */
+    return mod;
   }
 
 }

@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import net.bancino.robotics.swerveio.SwerveDrive;
 
-public class Drive extends CommandBase {
+public class AutonDrive extends CommandBase {
 
   private SwerveDrive swerve;
   private double distance;
@@ -21,7 +21,7 @@ public class Drive extends CommandBase {
   /**
    * Creates a new Drive.
    */
-  public Drive(SwerveDrive swerve, double distance, double duration) {
+  public AutonDrive(SwerveDrive swerve, double distance, double duration) {
     this.swerve = swerve;
     this.distance = distance;
     this.duration = duration;

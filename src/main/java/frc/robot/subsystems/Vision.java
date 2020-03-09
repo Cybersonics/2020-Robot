@@ -7,11 +7,16 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Vision extends SubsystemBase {
 
@@ -21,8 +26,9 @@ public class Vision extends SubsystemBase {
     private static NetworkTableEntry Pitch;
     private static NetworkTableEntry Roll;
 
+    private Solenoid outterLightRing;
+    private Solenoid innerLightRing;
 
-    private CommandScheduler scheduler;
     /**
     * Creates a new ExampleSubsystem.
     */
@@ -33,8 +39,27 @@ public class Vision extends SubsystemBase {
         Pitch = CameraTable.getEntry("pitch");
         Roll = CameraTable.getEntry("roll");
 
-        scheduler = CommandScheduler.getInstance();
-        scheduler.registerSubsystem(this);
+        
+        ShuffleboardTab tab = Shuffleboard.getTab("Turret");
+        Pitch = tab.add("Vision Pitch", 0.0)
+                .withPosition(0, 3)
+                .withSize(2, 1)
+                .getEntry();
+        Roll = tab.add("Vision Roll", 0.0)
+                .withPosition(0, 4)
+                .withSize(2, 1)
+                .getEntry();
+        Yaw = tab.add("Vision Yaw", 0.0)
+                .withPosition(0, 5)
+                .withSize(2, 1)
+                .getEntry();
+        
+        CameraServer.getInstance().startAutomaticCapture();
+
+        this.outterLightRing = new Solenoid(Constants.OutterLightRingId);
+        this.innerLightRing = new Solenoid(Constants.InnerLightRingId);
+
+        CommandScheduler.getInstance().registerSubsystem(this);
     }
 
     public static double getYaw(){
@@ -50,6 +75,28 @@ public class Vision extends SubsystemBase {
     public static double getRoll(){
         Roll = CameraTable.getEntry("roll");
         return Roll.getDouble(0.0);
+    }
+
+    public void turnOnLightRings() {
+        System.out.println("[Vision:subsystem] Turning Lights on");
+
+        this.innerLightRing.set(true);
+        this.outterLightRing.set(true);
+    }
+
+    
+    public void turnOffLightRings() {
+        System.out.println("[Vision:subsystem] Turning Lights off");
+
+        this.innerLightRing.set(false);
+        this.outterLightRing.set(false);
+    }
+
+    @Override()
+    public void periodic() {
+        Pitch.setDouble(Vision.getPitch());
+        Roll.setDouble(Vision.getRoll());
+        Yaw.setDouble(Vision.getYaw());
     }
 
 }

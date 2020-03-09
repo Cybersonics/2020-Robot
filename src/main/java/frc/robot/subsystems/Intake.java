@@ -17,7 +17,7 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
   public VictorSPX _intakeMotor;
-  public final double MAX_INTAKE_SPEED = .50;
+  public final double MAX_INTAKE_SPEED = .9;
 
   public Intake () {
     CommandScheduler.getInstance().registerSubsystem(this);

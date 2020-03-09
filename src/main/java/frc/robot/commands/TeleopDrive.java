@@ -84,7 +84,7 @@ public class TeleopDrive extends CommandBase {
         double fwd = throttle(deadband(driveJoystick.getRawAxis(fwdAxis.value)));
         double str = -throttle(deadband(driveJoystick.getRawAxis(strAxis.value)));
         double rcw = -throttleRotation(deadband(rotationJoystick.getRawAxis(rcwAxis.value)));
-        SwerveVector joystickVector = new SwerveVector(fwd, str, rcw);
+        SwerveVector joystickVector = new SwerveVector(fwd, str, -rcw);
         swerve.drive(joystickVector);
     }
 

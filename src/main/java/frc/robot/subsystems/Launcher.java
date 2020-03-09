@@ -101,7 +101,7 @@ public class Launcher extends SubsystemBase {
     _pivotMotor.configSelectedFeedbackSensor(FeedbackDevice.Analog, 0, 0);
     _pivotMotor.setInverted(false);
     _pivotMotor.setSensorPhase(true);
-    _pivotMotor.config_kP(0, 5, 0);
+    _pivotMotor.config_kP(0, 5, 0); //Change later
     _pivotMotor.config_kI(0, 0.04, 0);
     _pivotMotor.config_kD(0, 0, 0);
     _pivotMotor.config_IntegralZone(0, 100, 0);
