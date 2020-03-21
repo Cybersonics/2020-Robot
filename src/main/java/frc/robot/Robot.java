@@ -112,6 +112,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    //updateDashBoard();
   }
 
   @Override
@@ -125,21 +126,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-    updateDashBoard();
+    //updateDashBoard();
   }
 
   public void updateDashBoard() {
-    double[] encoders = Drive.getEncoderValues();
-		SmartDashboard.putNumber(("LeftFront AnalogInput position: "), encoders[0]);
-		SmartDashboard.putNumber(("LeftRear AnalogInput position: "), encoders[1]);
-		SmartDashboard.putNumber(("RightFront AnalogInput position: "), encoders[2]);
-		SmartDashboard.putNumber(("RightRear AnalogInput position: "), encoders[3]);
 
-    double[] encoder = Drive.getEncoderVal();
-		SmartDashboard.putNumber(("LeftFront Analog position: "), encoder[0]);
-		SmartDashboard.putNumber(("LeftRear Analog position: "), encoder[1]);
-		SmartDashboard.putNumber(("RightFront Analog position: "), encoder[2]);
-		SmartDashboard.putNumber(("RightRear Analog position: "), encoder[3]);
+    final double[] encoder = Drive.getEncoderVal();
+		//SmartDashboard.putNumber(("LeftFront Analog position: "), encoder[0]);
+		//SmartDashboard.putNumber(("LeftRear Analog position: "), encoder[1]);
+		SmartDashboard.putNumber(("RightFront Analog position: "), encoder[0]);
+    //SmartDashboard.putNumber(("RightRear Analog position: "), encoder[3]);
 
   }
 }

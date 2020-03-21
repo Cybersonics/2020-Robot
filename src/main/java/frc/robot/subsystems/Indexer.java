@@ -42,11 +42,11 @@ public class Indexer extends SubsystemBase {
 
   }
 
-  public static void RunMotor(){
-    IndexerMotor.set(ControlMode.PercentOutput, 1.0);
+  public void runElevator(double speed){
+    IndexerMotor.set(ControlMode.PercentOutput, speed);
   } 
 
-  public static void StopMotor(){
+  public void stopIndexer(){
     IndexerMotor.set(ControlMode.PercentOutput,0);
   }    
  

@@ -1,11 +1,11 @@
-package frc.robot.commands;
+package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
 public class Navx{
     public  AHRS navX; 
-    public  double zeroHeading;
-    public  double zeroAngle;
+    public  double heading;
+    public  double angle;
 
     
      // static variable single_instance of type Singleton 
@@ -18,8 +18,8 @@ public class Navx{
      private Navx() 
      { 
         navX = new AHRS(SPI.Port.kMXP);
-        zeroHeading = navX.getFusedHeading();
-        zeroAngle = navX.getAngle();
+        heading = navX.getFusedHeading();
+        angle = navX.getAngle();
      } 
    
      // static method to create instance of Singleton class 
@@ -31,10 +31,17 @@ public class Navx{
          return single_instance; 
      }
 
-     public void getFuzedHeading() {
-        this.zeroHeading = this.navX.getFusedHeading();
+     public double getFuzedHeading() {
+        this.heading = navX.getFusedHeading();
+        return heading;
      }
-     public void getAngle() {
-         this.zeroAngle = this.navX.getAngle();
+
+     public double getAngle() {
+         this.angle = navX.getAngle();
+         return angle;
+     }
+
+     public void zeroHeading() {
+         navX.zeroYaw();
      }
 }

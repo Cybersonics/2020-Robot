@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
+import frc.robot.commands.FieldCentricSwerveDrive;
 
 import java.util.function.DoubleSupplier;
 
@@ -26,18 +27,18 @@ public class DriveCommand extends CommandBase {
         addRequirements(drivetrain);
     }
 
-	@Override
-    public void execute() {
-        drivetrain.drive(
-                forward.getAsDouble(),
-                strafe.getAsDouble(),
-                rotation.getAsDouble(),
-                fieldCentric                
-        );
-    }
-
+	// @Override
+    // public void execute() {
+    //     drivetrain.drive(
+    //             forward.getAsDouble(),
+    //             strafe.getAsDouble(),
+    //             rotation.getAsDouble(),
+    //             fieldCentric                
+    //     );
+    // }
+    
     @Override
     public void end(boolean interrupted) {
-        drivetrain.drive(0.0, 0.0, 0.0, false);
+        // drivetrain.drive(0.0, 0.0, 0.0, false);
     }
 }

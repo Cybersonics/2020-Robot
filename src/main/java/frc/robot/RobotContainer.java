@@ -8,20 +8,23 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.IntakeIndexerControl;
-import frc.robot.commands.ShooterControl;
-import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutoCommand;
 import frc.robot.commands.DriveCommand;
-// import frc.robot.commands.FieldCentricSwerveDrive;
-import frc.robot.commands.Navx;
+import frc.robot.commands.FieldCentricSwerveDrive;
+import frc.robot.commands.IntakeIndexerControl;
+import frc.robot.commands.ShooterControl;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
+// import frc.robot.commands.FieldCentricSwerveDrive;
+import frc.robot.subsystems.Navx;
+import frc.robot.subsystems.Shooter;
+import frc.robot.commands.*;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -37,14 +40,14 @@ public class RobotContainer {
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   */
 
-  private final IntakeIndexerControl INTAKE_INDEXER_COMMAND = new IntakeIndexerControl();
-  private final ShooterControl SHOOTER_COMMAND = new ShooterControl();
+  //private final IntakeIndexerControl intakeCommand = new IntakeIndexerControl();
+  //private final ShooterControl shooterCommand = new ShooterControl();
 
-  private final Intake INTAKE_SUBSYSTEM = new Intake();
-  private final Indexer INDEXER_SUBSYSTEM = new Indexer();
-  private final Shooter SHOOTER_SUBSYSTEM = new Shooter();
-  private final Drive driveSub = new Drive();
-
+  //private final Intake INTAKE_SUBSYSTEM = new Intake();
+  //private final Indexer INDEXER_SUBSYSTEM = new Indexer();
+  //private final Shooter SHOOTER_SUBSYSTEM = new Shooter();
+  public static Drive driveSub = new Drive();
+ 
   private final AutoCommand m_autoCommand = new AutoCommand();
 
   public static Joystick leftJoy;
@@ -61,16 +64,20 @@ public class RobotContainer {
     controller = new XboxController(Constants.XBOX_CONTROLLER);
 
     CommandScheduler.getInstance()
-      .setDefaultCommand(
-        driveSub, 
-        new DriveCommand(
-          driveSub,
-          () -> leftJoy.getY(Hand.kLeft),
-          () -> leftJoy.getX(Hand.kLeft),
-          () -> rightJoy.getX(Hand.kRight),
-          leftJoy.getTrigger()   
-        )
-      );
+    .setDefaultCommand(
+      driveSub,
+      new FieldCentricSwerveDrive(
+        driveSub,
+        () -> leftJoy.getY(),
+        () -> leftJoy.getX(),
+        () -> rightJoy.getX(),
+        leftJoy.getTrigger()
+      )
+    );
+    // driveSub
+    //   .setDefaultCommand( 
+    //     FieldCentricSwerveDrive.getInstance() 
+    //   );
 
     configureButtonBindings();
   }
@@ -82,7 +89,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-  new JoystickButton(leftJoy, 7).whenPressed(() -> Navx.getInstance().getFuzedHeading());
+  //new JoystickButton(leftJoy, 7).whenPressed(() -> Navx.getInstance().getFuzedHeading());
+    new JoystickButton(leftJoy, 7).whenPressed(() -> driveSub.getNavHeading());
   }
 
   /**

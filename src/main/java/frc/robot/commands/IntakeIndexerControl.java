@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
  * An example command that uses an example subsystem.
  */
 public class IntakeIndexerControl extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  //@SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
   Intake intake;
   Indexer indexer;
@@ -52,22 +52,22 @@ public class IntakeIndexerControl extends CommandBase {
     // Intake Runs In
     if(Robot.xBoxController.getPOV() == 90) 
     {
-      intake.intakeStop();
-      intake.intakeRun();
-      indexer.RunMotor();
+      intake.stopIntake();
+      intake.runIntake(1); 
+      indexer.runElevator(1); 
     } 
     // Intake Goes Backward
     else if(Robot.xBoxController.getPOV() == 270) 
     {
-      intake.intakeStop();
-      intake.intakeReverse();
-      indexer.StopMotor();
+      intake.stopIntake();
+      intake.runIntake(-1);
+      indexer.stopIndexer();
     }
     // Intake Shuts off
     else if (Robot.xBoxController.getPOV() == 180) 
     {
-      intake.intakeStop();
-      indexer.StopMotor();
+      intake.stopIntake();
+      indexer.stopIndexer();
     } 
   }
 

@@ -38,15 +38,11 @@ public class Intake extends SubsystemBase {
     intakeMotor.configFactoryDefault();
   }
 
-  public void intakeRun() {
-    intakeMotor.set(ControlMode.PercentOutput, 1.0);
+  public void runIntake(double speed) {
+    intakeMotor.set(ControlMode.PercentOutput, speed);
   }
 
-  public void intakeReverse() {
-    intakeMotor.set(ControlMode.PercentOutput, -1.0);
-  }
-
-  public void intakeStop() {
+  public void stopIntake() {
     intakeMotor.set(ControlMode.PercentOutput, 0);
   }
 

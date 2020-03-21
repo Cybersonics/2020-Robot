@@ -48,27 +48,27 @@ public class ShooterControl extends CommandBase {
     if (Robot.xBoxController.getAButton()) 
     {
       ShooterSpeed = 0.9;
-      ShooterOne.SetShooterRate(ShooterSpeed);
-      ShooterOne.ShooterRun();
+      // ShooterOne.SetShooterRate(ShooterSpeed);
+      // ShooterOne.ShooterRun();
     }
     // b is pivot down
     else if (Robot.xBoxController.getBButton()) 
     {
-      ShooterOne.PivotUp();
+      //ShooterOne.PivotUp();
     }
     // x is to Pivot Down
     else if (Robot.xBoxController.getXButton()) 
     {
-      ShooterOne.PivotDown();
+      //ShooterOne.PivotDown();
     }
 
     // Automatically Locks Pivot
-    ShooterOne.PivotShutDown();
+    //ShooterOne.PivotShutDown();
 
     if (!Robot.xBoxController.getAButton()){ //epic gamming moment!
       ShooterSpeed = 0; // f's in the chat for the shooter speed
-      ShooterOne.SetShooterRate(ShooterSpeed); // begone ShooterSpeed
-      ShooterOne.ShooterRun(); // wow u r such noob Shooterspeed uwu
+      //ShooterOne.SetShooterRate(ShooterSpeed); // begone ShooterSpeed
+      //ShooterOne.ShooterRun(); // wow u r such noob Shooterspeed uwu
     }
 
 
