@@ -9,13 +9,10 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Robot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 // import org.usfirst.frc103.Robot2020.Robot;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 public class Intake extends SubsystemBase {

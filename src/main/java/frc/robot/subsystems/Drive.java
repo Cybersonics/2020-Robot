@@ -19,10 +19,10 @@ import edu.wpi.first.wpilibj.SPI;
 
 public class Drive extends SubsystemBase {
 
-	private static setSwerveModule frontLeft;
-	private static setSwerveModule backLeft;
+	private static swerveModule frontLeft;
+	private static swerveModule backLeft;
 	private static swerveModule frontRight;
-	private static setSwerveModule backRight;
+	private static swerveModule backRight;
 
 	public static AHRS navX; 
     public double heading;

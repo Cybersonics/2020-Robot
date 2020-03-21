@@ -8,7 +8,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Navx;
 import java.util.function.DoubleSupplier;
 import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj.smartdashboard.*;
@@ -58,7 +57,6 @@ public class FieldCentricSwerveDrive extends CommandBase {
 
 	@Override
 	public void initialize() {
-		//originHeading = Navx.getInstance().navX.getFusedHeading();
 		originHeading = drive.getNavHeading();
 	}
 
@@ -66,7 +64,6 @@ public class FieldCentricSwerveDrive extends CommandBase {
 	public void execute() {
 	
 		final double originOffset = 360 - originHeading;
-		// originCorr = Navx.getInstance().navX.getFusedHeading() + originOffset;
 		originCorr = drive.getNavHeading() + originOffset;
 		
 		double forward = -stickForward.getAsDouble();

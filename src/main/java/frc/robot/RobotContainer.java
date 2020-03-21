@@ -8,23 +8,19 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutoCommand;
-import frc.robot.commands.DriveCommand;
 import frc.robot.commands.FieldCentricSwerveDrive;
 import frc.robot.commands.IntakeIndexerControl;
 import frc.robot.commands.ShooterControl;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
-// import frc.robot.commands.FieldCentricSwerveDrive;
-import frc.robot.subsystems.Navx;
 import frc.robot.subsystems.Shooter;
-import frc.robot.commands.*;
+
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
