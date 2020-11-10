@@ -116,7 +116,8 @@ public class DriveTrain extends SwerveDrive {
         
         // swerve.setIdleAngle(0, false);
 
-        swerve.startLogging(new DashboardSwerveLogger());
+        // TODO: Only on when debugging drive/pivot motors
+        // swerve.startLogging(new DashboardSwerveLogger());
 
         // File logFile = new File("pid.csv");
         // try {

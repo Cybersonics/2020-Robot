@@ -16,7 +16,7 @@ import frc.robot.Constants;
 
 public class MechIntake extends SubsystemBase {
   public TalonSRX _intakeMotor;
-  public final double MAX_INTAKE_SPEED = .50;
+  public final double MAX_INTAKE_SPEED = 1.0;
 
   /**
    * Creates a new MechIntake.

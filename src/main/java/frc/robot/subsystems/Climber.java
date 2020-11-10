@@ -11,7 +11,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Servo;
-//import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -36,11 +35,11 @@ public class Climber extends SubsystemBase {
     }
 
     public void extend(){
-        ClimberTalon.set(ControlMode.PercentOutput, 0.6);
+        ClimberTalon.set(ControlMode.PercentOutput, 0.75);
     }
 
     public void retract(){
-        ClimberTalon.set(ControlMode.PercentOutput, -(0.6));
+        ClimberTalon.set(ControlMode.PercentOutput, -(0.75));
     }
 
     public void stop(){

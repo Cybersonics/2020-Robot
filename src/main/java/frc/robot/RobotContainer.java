@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
@@ -26,6 +27,7 @@ import frc.robot.commands.AdjustPivotCommand;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.auton.AutonRoutines;
 import frc.robot.commands.auton.AutonSelector;
+import frc.robot.commands.auton.PathWeaverAuton;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
@@ -147,16 +149,16 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // This command will run in autonomous
 
-    return autonSelector.getCommand();
+    // return autonSelector.getCommand();
 
 
-    // try {
-    //   return new PathWeaverAuton(drive, "paths/output/" + "Forward" + ".wpilib.json");
-    // } catch (java.io.IOException e) {
-    //   e.printStackTrace();
-    //   DriverStation.reportError("Could not load pathweaver swerve drive.", true);
-    //   return null;
-    // }
+    try {
+      return new PathWeaverAuton(_drive, "paths/output/" + "Forward" + ".wpilib.json");
+    } catch (java.io.IOException e) {
+      e.printStackTrace();
+      DriverStation.reportError("Could not load pathweaver swerve drive.", true);
+      return null;
+    }
   }
 
   /**
