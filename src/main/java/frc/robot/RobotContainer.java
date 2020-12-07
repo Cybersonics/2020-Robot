@@ -70,10 +70,7 @@ public class RobotContainer {
         leftJoy.getTrigger()
       )
     );
-    // driveSub
-    //   .setDefaultCommand( 
-    //     FieldCentricSwerveDrive.getInstance() 
-    //   );
+  
 
     configureButtonBindings();
   }
@@ -86,7 +83,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
   //new JoystickButton(leftJoy, 7).whenPressed(() -> Navx.getInstance().getFuzedHeading());
-    new JoystickButton(leftJoy, 7).whenPressed(() -> driveSub.getNavHeading());
+    new JoystickButton(leftJoy, 7).whenPressed(() -> driveSub.zeroNavHeading());
   }
 
   /**

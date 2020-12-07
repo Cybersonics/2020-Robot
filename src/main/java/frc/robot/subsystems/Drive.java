@@ -17,6 +17,9 @@ import frc.robot.Constants;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.*;
+
 public class Drive extends SubsystemBase {
 
 	private static swerveModule frontLeft;
@@ -46,6 +49,12 @@ public class Drive extends SubsystemBase {
 	private final boolean invertDrive = false;
 	private final boolean invertSteer = true;
 
+	private ShuffleboardTab driveTab = Shuffleboard.getTab("DriveTab");
+	private NetworkTableEntry lfSetAngle = driveTab.addPersistent("LF Set Angle", 0).getEntry();
+	private NetworkTableEntry lbSetAngle = driveTab.addPersistent("LB Set Angle", 0).getEntry();
+	private NetworkTableEntry rfSetAngle = driveTab.addPersistent("RF Set Angle", 0).getEntry();
+	private NetworkTableEntry rbSetAngle = driveTab.addPersistent("RB Set Angle", 0).getEntry();
+
 	public Drive() {
 		
 		// frontLeft = new setSwerveModule(Constants.FL_STEER_ENCODER, Constants.FL_STEER_MOTOR, 
@@ -61,6 +70,8 @@ public class Drive extends SubsystemBase {
 		// Constants.BR_DRIVE_MOTOR, invertDrive, invertSteer);	
 
 		navX = new AHRS(SPI.Port.kMXP);
+		NetworkTableEntry myBool = 
+		Shuffleboard.getTab("DriveTab").add("test001", false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
 	}
 
 	// public void stopFrontLeft() {
@@ -118,10 +129,23 @@ public class Drive extends SubsystemBase {
 		// calculation to offset
 		// for initial position/calibration of drives.
 
-		double angleFL = angle(B, D) - Constants.FL_STEER_OFFSET;
-		double angleBL = angle(A, D) + Constants.BL_STEER_OFFSET;
-		double angleFR = angle(B, C) - Constants.FR_STEER_OFFSET;
-		double angleBR = angle(A, C) + Constants.BR_STEER_OFFSET;
+		double lfOffset = lfSetAngle.getDouble(0.0);
+		double lbOffset = lbSetAngle.getDouble(0.0);
+		double rfOffset = rfSetAngle.getDouble(0.0);
+		double rbOffset = rbSetAngle.getDouble(0.0);
+
+		/*For swerve and steer drives constants are 90 degrees out of phase when
+		*they are inserted in frames sideways.
+		*angleFL - 90
+		*angleBL + 90
+		*angleFR - 90
+		*angleBR + 90
+		*/
+
+		double angleFL = angle(B, D) + Constants.FL_STEER_OFFSET + lfOffset; 
+		double angleBL = angle(A, D) + Constants.BL_STEER_OFFSET + lbOffset;
+		double angleFR = angle(B, C) + Constants.FR_STEER_OFFSET + rfOffset;
+		double angleBR = angle(A, C) + Constants.BR_STEER_OFFSET + rbOffset;
 		// Compute the maximum speed so that we can scale all the speeds to the range
 		// [0, 1]
 		double maxSpeed = Collections.max(Arrays.asList(speedFL, speedBL, speedFR, speedBR, 1.0));
@@ -166,7 +190,11 @@ public class Drive extends SubsystemBase {
      public double getNavAngle() {
          this.angle = navX.getAngle();
          return angle;
-     }
+	 }
+	 
+	 public void zeroNavHeading() {
+		 navX.zeroYaw();
+	 }
 
 
 	public void initDefaultCommand() {

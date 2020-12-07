@@ -28,8 +28,6 @@ public class FieldCentricSwerveDrive extends CommandBase {
 	private final DoubleSupplier stickStrafe;
 	private final DoubleSupplier stickRotation;
 	private final boolean stickFieldCentric;
-	//private final double forward;
-
 	
 	//private static FieldCentricSwerveDrive instance;
 	public FieldCentricSwerveDrive(Drive driveSub,
