@@ -57,6 +57,7 @@ public class Drive extends SubsystemBase {
 	public static final double DEADZONE = 0.1;
 	public static final double MAX_REVERSIBLE_SPEED_DIFFERENCE = 0.5 * MAX_SPEED;
 
+	// private static final double STEER_P = 1.0, STEER_I = 0.1, STEER_D = 0.002;
 	private static final double STEER_P = .2, STEER_I = 0.00, STEER_D = 0.002;
 	private static final int STATUS_FRAME_PERIOD = 5;
 	private static final double RAMP_RATE = 0.5;

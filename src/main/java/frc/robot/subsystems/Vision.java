@@ -34,6 +34,7 @@ public class Vision extends SubsystemBase {
     */
     public Vision () {
         Table = NetworkTableInstance.getDefault();
+        Table.setServerTeam(103);
         CameraTable = Table.getTable("chameleon-vision").getSubTable("MyCamName");
         Yaw = CameraTable.getEntry("yaw");
         Pitch = CameraTable.getEntry("pitch");

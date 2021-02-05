@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -34,7 +35,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.MechIntake;
 import frc.robot.subsystems.Vision;
-import net.bancino.robotics.swerveio.command.RunnableCommand;
+// import net.bancino.robotics.libio.command.RunnableCommand;
 import net.bancino.robotics.swerveio.gyro.NavXGyro;
 
 /**
@@ -61,7 +62,7 @@ public class RobotContainer {
   
   private final IntakeCommand _intakeCommand = new IntakeCommand(_intake);
   private final IndexerCommand _indexerCommand = new IndexerCommand(_indexer);
-  private final ShooterControl _shooterCommand = new ShooterControl(_launcher);
+  private final ShooterControl _shooterCommand = new ShooterControl(_launcher, _vision);
   private final ClimberCommand extend = new ClimberCommand();
 
   private final AutonRoutines routines;
@@ -75,6 +76,8 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    
+    CameraServer.getInstance().startAutomaticCapture();
     leftJoy = new Joystick(Constants.LEFT_JOYSTICK);
     rightJoy = new Joystick(Constants.RIGHT_JOYSTICK);
     xboxController = new XboxController(Constants.XBOX_CONTROLLER);
@@ -116,11 +119,11 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(leftJoy, 7)
-      .whenPressed(new RunnableCommand(() -> {
-        _drive.getGyro().zero();
-      }, _drive)
-    );
+    // new JoystickButton(leftJoy, 7)
+    //   .whenPressed(new RunnableCommand(() -> {
+    //     _drive.getGyro().zero();
+    //   }, _drive)
+    // );
 
     new JoystickButton(rightJoy, 3).whenPressed(() -> extend.extend());
     new JoystickButton(rightJoy, 3).whenPressed(new SnapPivotCommand(_launcher, Location.LiftOpen));

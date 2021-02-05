@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.Vision;
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -21,7 +22,7 @@ public class ShooterControl extends CommandBase {
   public double Pivot = 0.9;
 
   Launcher _shooter;
-
+  Vision _vision;
   
 
   /**
@@ -29,15 +30,17 @@ public class ShooterControl extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ShooterControl(Launcher shooter) {
+  public ShooterControl(Launcher shooter, Vision vision) {
     _shooter = shooter;
+    _vision = vision;
 
     CommandScheduler.getInstance().requiring(shooter);
     
   }
 
   public void fire() {
-      _shooter.start();
+    _vision.periodic();
+    _shooter.start();
   }
 
   public void stop() {
